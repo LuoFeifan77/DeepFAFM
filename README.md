@@ -10,7 +10,7 @@ or
 conda env create --name DeepFAFM -f environment.yml
 
 # Datasets
-For training and testing datasets used in this paper, please refer to the ULRSSM repository from Dongliang Cao et al. Please follow the instructions there to download the necessary datasets and place them under ../data/://
+For training and testing datasets used in this paper, please refer to the ULRSSM repository from Dongliang Cao et al. Please follow the instructions there to download the necessary datasets and place them under ../data/:
 
 ├── data
     ├── FAUST_r
@@ -24,7 +24,7 @@ For training and testing datasets used in this paper, please refer to the ULRSSM
 
 
 # Data precomputation
-python preprocess_dataset.py 
+python preprocess_dataset.py     
 
 # Train
 python train.py --opt options/train/smal.yaml
@@ -39,6 +39,7 @@ You can find partial pre-trained models in checkpoints_ours for reproducibility.
 The framework implementation is adapted from Unsupervised Learning of Robust Spectral Shape Matching.
 The implementation of DiffusionNet is based on the official implementation.
 
+[Contribution guidelines for this project](docs/CONTRIBUTING.md)
 
 
 
