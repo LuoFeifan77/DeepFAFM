@@ -3,9 +3,9 @@ Implementations for Deep Frequency Awareness Functional Maps for Robust Shape Ma
 
 
 # Installation
-conda create -n fmnet python=3.8 # create new virtual environment
-conda activate fmnet
-pip install -r requirements.txt #
+conda create -n fmnet python=3.8 # create new virtual environment\
+conda activate fmnet\
+pip install -r requirements.txt \
 or 
 conda env create --name DeepFAFM -f environment.yml
 
