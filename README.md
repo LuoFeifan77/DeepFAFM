@@ -37,6 +37,8 @@ You can find partial pre-trained models in checkpoints_ours for reproducibility.
 
 # Acknowledgement
 The framework implementation is adapted from [Unsupervised Learning of Robust Spectral Shape Matching](https://github.com/dongliangcao/Unsupervised-Learning-of-Robust-Spectral-Shape-Matching/tree/main?tab=readme-ov-file).
+
+
 The implementation of [DiffusionNet](https://github.com/nmwsharp/diffusion-net) is based on the official implementation.
 
 
