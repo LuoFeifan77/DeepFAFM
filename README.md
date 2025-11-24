@@ -31,6 +31,7 @@ For training and testing datasets used in this paper, please refer to the [**ULR
 We thank the original dataset providers for their contributions to the shape analysis community, and that all credits should go to the original authors.
 
 ## Data precomputation
+```python
 python preprocess_dataset.py  
 ```     
 
