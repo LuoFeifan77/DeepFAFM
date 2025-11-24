@@ -27,7 +27,13 @@ For training and testing datasets used in this paper, please refer to the [**ULR
 python preprocess_dataset.py     
 
 # Train
+<div style="background-color: #f0f8ff; padding: 15px; border-radius: 5px;">
+
 python train.py --opt options/train/smal.yaml
+
+</div>
+
+
 
 # Test
 python train.py --opt options/test/smal.yaml
