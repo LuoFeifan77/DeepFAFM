@@ -1,6 +1,6 @@
 # DeepFAFM
-Implementations for Deep Frequency Awareness Functional Maps for Robust Shape Matching(TVCG2025).
 
+![Deep Frequency Awareness Functional Maps for Robust Shape Matching(TVCG2025)](https://github.com/LuoFeifan77/DeepFAFM/tree/main/figures/fig1)
 
 # Installation
 conda create -n fmnet python=3.8 # create new virtual environment\
