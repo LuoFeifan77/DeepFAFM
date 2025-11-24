@@ -36,10 +36,9 @@ python train.py --opt options/test/smal.yaml
 You can find partial pre-trained models in checkpoints_ours for reproducibility.
 
 # Acknowledgement
-The framework implementation is adapted from Unsupervised Learning of Robust Spectral Shape Matching.
-The implementation of DiffusionNet is based on the official implementation.
+The framework implementation is adapted from [Unsupervised Learning of Robust Spectral Shape Matching](https://github.com/dongliangcao/Unsupervised-Learning-of-Robust-Spectral-Shape-Matching/tree/main?tab=readme-ov-file).
+The implementation of [DiffusionNet](https://github.com/nmwsharp/diffusion-net) is based on the official implementation.
 
-[Contribution guidelines for this project](docs/CONTRIBUTING.md)
 
 
 
