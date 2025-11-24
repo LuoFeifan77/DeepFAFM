@@ -30,7 +30,7 @@ python train.py --opt options/train/smal.yaml
 
 
 # Test
-python train.py --opt options/test/smal.yaml
+python test.py --opt options/test/smal.yaml
 
 # Pretrained models
 You can find partial pre-trained models in [checkpoints_ours](https://github.com/LuoFeifan77/DeepFAFM/tree/main/checkpoints_ours) for reproducibility.
