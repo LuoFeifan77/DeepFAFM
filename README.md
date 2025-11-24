@@ -27,12 +27,7 @@ For training and testing datasets used in this paper, please refer to the [**ULR
 python preprocess_dataset.py     
 
 # Train
-<div style="background-color: #f0f8ff; padding: 15px; border-radius: 5px;">
-
 python train.py --opt options/train/smal.yaml
-
-</div>
-
 
 
 # Test
@@ -45,6 +40,18 @@ You can find partial pre-trained models in [checkpoints_ours](https://github.com
 The framework implementation is adapted from [Unsupervised Learning of Robust Spectral Shape Matching](https://github.com/dongliangcao/Unsupervised-Learning-of-Robust-Spectral-Shape-Matching/tree/main?tab=readme-ov-file).\
 The implementation of [DiffusionNet](https://github.com/nmwsharp/diffusion-net) is based on the official implementation.\
 The filter learning network implementation is adapted from [How Powerful are Spectral Graph Neural Networks](https://github.com/GraphPKU/JacobiConv/tree/master).\
+
+# Attribution
+Please cite our paper when using the code. You can use the following bibtex\
+@article{luo2025deep,
+  title={Deep Frequency Awareness Functional Maps for Robust Shape Matching},
+  author={Luo, Feifan and Li, Qinsong and Hu, Ling and Wang, Haibo and Xu, Haojun and Liu, Xinru and Liu, Shengjun and Chen, Hongyang},
+  journal={IEEE Transactions on Visualization and Computer Graphics},
+  year={2025},
+  publisher={IEEE}
+}
+
+
 
 
 
