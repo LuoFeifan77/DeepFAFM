@@ -12,15 +12,21 @@ conda env create --name DeepFAFM -f environment.yml
 # Datasets
 For training and testing datasets used in this paper, please refer to the [**ULRSSM**](https://drive.google.com/file/d/1zbBs3NjUIBBmVebw38MC1nhu_Tpgn1gr/view?usp=share_link) repository from Dongliang Cao et al. Please follow the instructions there to download the necessary datasets and place them under ../data/:
 
-- data
-  - FAUST_r
-  - FAUST_a
-  - SCAPE_r
-  - SCAPE_a
-  - SHREC19_r
-  - TOPKIDS
-  - SMAL_r
-  - DT4D_r
+```Shell
+├── data
+    ├── FAUST_r
+    ├── FAUST_a
+    ├── SCAPE_r
+    ├── SCAPE_a
+    ├── SHREC19_r
+    ├── TOPKIDS
+    ├── SMAL_r
+    ├── DT4D_r
+    ├── SHREC20
+    ├── SHREC16
+    ├── SHREC16_test
+```
+We thank the original dataset providers for their contributions to the shape analysis community, and that all credits should go to the original authors.
 
 # Data precomputation
 python preprocess_dataset.py     
