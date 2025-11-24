@@ -4,10 +4,10 @@
 
 ## Installation
 ```bash 
-conda create -n fmnet python=3.8 # create new virtual environment\
+conda create -n fmnet python=3.8 # create new virtual environment
 conda activate fmnet\
-pip install -r requirements.txt \  # cuda==11.8!
-**or **\
+pip install -r requirements.txt   # cuda==11.8!
+**or **
 conda env create --name DeepFAFM -f environment.yml
 ```
 
