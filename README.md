@@ -38,7 +38,7 @@ You can find partial pre-trained models in [checkpoints_ours](https://github.com
 # Acknowledgement
 The framework implementation is adapted from [Unsupervised Learning of Robust Spectral Shape Matching](https://github.com/dongliangcao/Unsupervised-Learning-of-Robust-Spectral-Shape-Matching/tree/main?tab=readme-ov-file).\
 The implementation of [DiffusionNet](https://github.com/nmwsharp/diffusion-net) is based on the official implementation.\
-The filter learning network implementation is adapted from [How Powerful are Spectral Graph Neural Networks](https://github.com/GraphPKU/JacobiConv/tree/master).\
+The filter learning network implementation is adapted from [How Powerful are Spectral Graph Neural Networks](https://github.com/GraphPKU/JacobiConv/tree/master).
 
 # Attribution
 Please cite our paper when using the code. You can use the following bibtex\
