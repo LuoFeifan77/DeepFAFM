@@ -10,7 +10,7 @@ or
 conda env create --name DeepFAFM -f environment.yml
 
 # Datasets
-For training and testing datasets used in this paper, please refer to the ULRSSM repository from Dongliang Cao et al. Please follow the instructions there to download the necessary datasets and place them under ../data/:
+For training and testing datasets used in this paper, please refer to the ULRSSM repository from Dongliang Cao et al. Please follow the instructions there to download the necessary datasets and place them under ../data/://
 
 ├── data
     ├── FAUST_r
