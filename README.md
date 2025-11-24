@@ -6,11 +6,11 @@ Implementations for Deep Frequency Awareness Functional Maps for Robust Shape Ma
 conda create -n fmnet python=3.8 # create new virtual environment\
 conda activate fmnet\
 pip install -r requirements.txt \
-or 
+**or **\
 conda env create --name DeepFAFM -f environment.yml
 
 # Datasets
-For training and testing datasets used in this paper, please refer to the ULRSSM repository from Dongliang Cao et al. Please follow the instructions there to download the necessary datasets and place them under ../data/:
+For training and testing datasets used in this paper, please refer to the [**ULRSSM**](https://drive.google.com/file/d/1zbBs3NjUIBBmVebw38MC1nhu_Tpgn1gr/view?usp=share_link) repository from Dongliang Cao et al. Please follow the instructions there to download the necessary datasets and place them under ../data/:
 
 ├── data
     ├── FAUST_r
@@ -36,11 +36,9 @@ python train.py --opt options/test/smal.yaml
 You can find partial pre-trained models in checkpoints_ours for reproducibility.
 
 # Acknowledgement
-The framework implementation is adapted from [Unsupervised Learning of Robust Spectral Shape Matching](https://github.com/dongliangcao/Unsupervised-Learning-of-Robust-Spectral-Shape-Matching/tree/main?tab=readme-ov-file).
-
-
-The implementation of [DiffusionNet](https://github.com/nmwsharp/diffusion-net) is based on the official implementation.
-
+The framework implementation is adapted from [Unsupervised Learning of Robust Spectral Shape Matching](https://github.com/dongliangcao/Unsupervised-Learning-of-Robust-Spectral-Shape-Matching/tree/main?tab=readme-ov-file).\
+The implementation of [DiffusionNet](https://github.com/nmwsharp/diffusion-net) is based on the official implementation.\
+The fliter learning network implementation is adapted from [How Powerful are Spectral Graph Neural Networks]([https://github.com/dongliangcao/Unsupervised-Learning-of-Robust-Spectral-Shape-Matching/tree/main?tab=readme-ov-file](https://github.com/GraphPKU/JacobiConv/tree/master)).\
 
 
 
