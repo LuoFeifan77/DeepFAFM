@@ -1,0 +1,509 @@
+2026-04-08 15:13:44,809 INFO: 
+Version Information: 
+	Python: 3.8.20
+	PyTorch: 2.0.0+cu118
+	TorchVision: 0.15.0+cu118
+2026-04-08 15:13:44,809 INFO: 
+  name: smal_FAPModel
+  backend: dp
+  type: FAPModel
+  num_gpu: 1
+  gpu_idx: 7
+  manual_seed: 1234
+  non-isometric: True
+  partial: False
+  visualize: True
+  path:[
+    resume_state: checkpoints_ours/smal.pth
+    resume: False
+    results_root: /nas/luofeifan/shape_correspondence/DeepFAFP_main/results/smal_FAPModel
+    log: /nas/luofeifan/shape_correspondence/DeepFAFP_main/results/smal_FAPModel/log
+    visualization: /nas/luofeifan/shape_correspondence/DeepFAFP_main/results/smal_FAPModel/visualization
+  ]
+  datasets:[
+    test_dataset:[
+      name: Val
+      type: PairSmalDataset
+      phase: test
+      data_root: ../data/SMAL_r/
+      category: True
+      return_evecs: True
+      return_faces: True
+      num_evecs: 200
+      return_corr: True
+      return_dist: True
+    ]
+  ]
+  networks:[
+    feature_extractor:[
+      type: DiffusionNet
+      in_channels: 3
+      out_channels: 256
+      cache_dir: ../data/SMAL_r/diffusion
+      input_type: xyz
+    ]
+    fmap_net:[
+      type: RegularizedFMNet
+      bidirectional: False
+    ]
+    permutation:[
+      type: Similarity
+      tau: 0.07
+      hard: True
+    ]
+    conv:[
+      type: Learned_Fliters
+      Poly_Type: JacobiConv
+      orders: 8
+      alpha: 1.0
+      learnable_bases: True
+      learnable_alphas: True
+      normalized_bases: True
+      a: 1.0
+      b: 1.0
+    ]
+    comb:[
+      type: Combination
+      orders_basis: 8
+      output_channels: 6
+    ]
+  ]
+  val:[
+    metrics:[
+      geo_error:[
+        type: calculate_geodesic_error
+      ]
+      plot_pck:[
+        type: plot_pck
+      ]
+    ]
+  ]
+  is_train: False
+  dist: False
+  rank: 0
+  world_size: 1
+
+2026-04-08 15:13:44,812 INFO: Dataset [PairSmalDataset]-[Val] is built.
+2026-04-08 15:13:44,812 INFO: Number of test images in Val: 400
+2026-04-08 15:13:44,819 INFO: Network [DiffusionNet] is created.
+2026-04-08 15:13:44,819 INFO: Network [RegularizedFMNet] is created.
+2026-04-08 15:13:44,819 INFO: Network [Similarity] is created.
+2026-04-08 15:13:44,819 INFO: Network [Learned_Fliters] is created.
+2026-04-08 15:13:44,820 INFO: Network [Combination] is created.
+2026-04-08 15:13:45,099 INFO: Network: DiffusionNet, with parameters: 494,336
+2026-04-08 15:13:45,099 INFO: Network: RegularizedFMNet, with parameters: 0
+2026-04-08 15:13:45,099 INFO: Network: Similarity, with parameters: 0
+2026-04-08 15:13:45,099 INFO: Network: Learned_Fliters, with parameters: 10
+2026-04-08 15:13:45,099 INFO: Network: Combination, with parameters: 48
+2026-04-08 15:13:45,099 INFO: Metric [function] is created.
+2026-04-08 15:13:45,099 INFO: Metric [function] is created.
+2026-04-08 15:13:45,302 INFO: Resuming network: feature_extractor
+2026-04-08 15:13:45,302 INFO: Network fmap_net has no param. Ignore it.
+2026-04-08 15:13:45,302 INFO: Network permutation has no param. Ignore it.
+2026-04-08 15:13:45,302 INFO: Resuming network: conv
+2026-04-08 15:13:45,302 INFO: Resuming network: comb
+2026-04-08 15:13:45,303 INFO: Model [FAPModel] is created.
+2026-04-08 15:13:45,303 INFO: Testing PairSmalDataset...
+2026-04-08 15:13:47,663 INFO: cougar_01-cougar_01, geo_err: 0.0000
+2026-04-08 15:13:48,124 INFO: cougar_01-cougar_02, geo_err: 0.0173
+2026-04-08 15:13:48,880 INFO: cougar_01-cougar_03, geo_err: 0.0216
+2026-04-08 15:13:49,280 INFO: cougar_01-cougar_04, geo_err: 0.0203
+2026-04-08 15:13:50,482 INFO: cougar_01-hippo_01, geo_err: 0.0500
+2026-04-08 15:13:50,887 INFO: cougar_01-hippo_02, geo_err: 0.0650
+2026-04-08 15:13:52,053 INFO: cougar_01-hippo_03, geo_err: 0.0553
+2026-04-08 15:13:52,461 INFO: cougar_01-hippo_04, geo_err: 0.0627
+2026-04-08 15:13:53,679 INFO: cougar_01-hippo_05, geo_err: 0.0566
+2026-04-08 15:13:54,081 INFO: cougar_01-hippo_06, geo_err: 0.0560
+2026-04-08 15:13:55,253 INFO: cougar_01-horse_01, geo_err: 0.0360
+2026-04-08 15:13:55,648 INFO: cougar_01-horse_02, geo_err: 0.0341
+2026-04-08 15:13:56,836 INFO: cougar_01-horse_03, geo_err: 0.0332
+2026-04-08 15:13:57,238 INFO: cougar_01-horse_04, geo_err: 0.0394
+2026-04-08 15:13:58,428 INFO: cougar_01-horse_05, geo_err: 0.0467
+2026-04-08 15:13:58,841 INFO: cougar_01-horse_06, geo_err: 0.0376
+2026-04-08 15:14:00,015 INFO: cougar_01-horse_07, geo_err: 0.0333
+2026-04-08 15:14:00,420 INFO: cougar_01-horse_08, geo_err: 0.0295
+2026-04-08 15:14:01,579 INFO: cougar_01-horse_09, geo_err: 0.0420
+2026-04-08 15:14:01,975 INFO: cougar_01-horse_10, geo_err: 0.0408
+2026-04-08 15:14:03,278 INFO: cougar_02-cougar_01, geo_err: 0.0172
+2026-04-08 15:14:03,683 INFO: cougar_02-cougar_02, geo_err: 0.0000
+2026-04-08 15:14:04,778 INFO: cougar_02-cougar_03, geo_err: 0.0215
+2026-04-08 15:14:05,190 INFO: cougar_02-cougar_04, geo_err: 0.0248
+2026-04-08 15:14:06,400 INFO: cougar_02-hippo_01, geo_err: 0.0870
+2026-04-08 15:14:06,810 INFO: cougar_02-hippo_02, geo_err: 0.0716
+2026-04-08 15:14:07,994 INFO: cougar_02-hippo_03, geo_err: 0.1073
+2026-04-08 15:14:08,404 INFO: cougar_02-hippo_04, geo_err: 0.0851
+2026-04-08 15:14:09,857 INFO: cougar_02-hippo_05, geo_err: 0.0635
+2026-04-08 15:14:10,260 INFO: cougar_02-hippo_06, geo_err: 0.0847
+2026-04-08 15:14:11,191 INFO: cougar_02-horse_01, geo_err: 0.0366
+2026-04-08 15:14:11,569 INFO: cougar_02-horse_02, geo_err: 0.0370
+2026-04-08 15:14:12,790 INFO: cougar_02-horse_03, geo_err: 0.0420
+2026-04-08 15:14:13,165 INFO: cougar_02-horse_04, geo_err: 0.0352
+2026-04-08 15:14:14,398 INFO: cougar_02-horse_05, geo_err: 0.0590
+2026-04-08 15:14:14,778 INFO: cougar_02-horse_06, geo_err: 0.0427
+2026-04-08 15:14:16,029 INFO: cougar_02-horse_07, geo_err: 0.0345
+2026-04-08 15:14:16,401 INFO: cougar_02-horse_08, geo_err: 0.0308
+2026-04-08 15:14:17,661 INFO: cougar_02-horse_09, geo_err: 0.0410
+2026-04-08 15:14:18,034 INFO: cougar_02-horse_10, geo_err: 0.0494
+2026-04-08 15:14:19,367 INFO: cougar_03-cougar_01, geo_err: 0.0219
+2026-04-08 15:14:19,771 INFO: cougar_03-cougar_02, geo_err: 0.0223
+2026-04-08 15:14:20,877 INFO: cougar_03-cougar_03, geo_err: 0.0000
+2026-04-08 15:14:21,265 INFO: cougar_03-cougar_04, geo_err: 0.0306
+2026-04-08 15:14:22,481 INFO: cougar_03-hippo_01, geo_err: 0.0744
+2026-04-08 15:14:22,860 INFO: cougar_03-hippo_02, geo_err: 0.0797
+2026-04-08 15:14:24,077 INFO: cougar_03-hippo_03, geo_err: 0.0869
+2026-04-08 15:14:24,456 INFO: cougar_03-hippo_04, geo_err: 0.0801
+2026-04-08 15:14:25,684 INFO: cougar_03-hippo_05, geo_err: 0.0673
+2026-04-08 15:14:26,074 INFO: cougar_03-hippo_06, geo_err: 0.0878
+2026-04-08 15:14:27,278 INFO: cougar_03-horse_01, geo_err: 0.0392
+2026-04-08 15:14:27,689 INFO: cougar_03-horse_02, geo_err: 0.0344
+2026-04-08 15:14:29,050 INFO: cougar_03-horse_03, geo_err: 0.0375
+2026-04-08 15:14:29,478 INFO: cougar_03-horse_04, geo_err: 0.0319
+2026-04-08 15:14:30,637 INFO: cougar_03-horse_05, geo_err: 0.0807
+2026-04-08 15:14:31,018 INFO: cougar_03-horse_06, geo_err: 0.0381
+2026-04-08 15:14:32,180 INFO: cougar_03-horse_07, geo_err: 0.0355
+2026-04-08 15:14:32,573 INFO: cougar_03-horse_08, geo_err: 0.0304
+2026-04-08 15:14:33,802 INFO: cougar_03-horse_09, geo_err: 0.0365
+2026-04-08 15:14:34,193 INFO: cougar_03-horse_10, geo_err: 0.0423
+2026-04-08 15:14:35,502 INFO: cougar_04-cougar_01, geo_err: 0.0218
+2026-04-08 15:14:35,918 INFO: cougar_04-cougar_02, geo_err: 0.0266
+2026-04-08 15:14:37,014 INFO: cougar_04-cougar_03, geo_err: 0.0304
+2026-04-08 15:14:37,440 INFO: cougar_04-cougar_04, geo_err: 0.0000
+2026-04-08 15:14:38,688 INFO: cougar_04-hippo_01, geo_err: 0.0508
+2026-04-08 15:14:39,111 INFO: cougar_04-hippo_02, geo_err: 0.0608
+2026-04-08 15:14:40,349 INFO: cougar_04-hippo_03, geo_err: 0.0711
+2026-04-08 15:14:40,765 INFO: cougar_04-hippo_04, geo_err: 0.0668
+2026-04-08 15:14:41,971 INFO: cougar_04-hippo_05, geo_err: 0.0602
+2026-04-08 15:14:42,370 INFO: cougar_04-hippo_06, geo_err: 0.0707
+2026-04-08 15:14:43,560 INFO: cougar_04-horse_01, geo_err: 0.0310
+2026-04-08 15:14:43,988 INFO: cougar_04-horse_02, geo_err: 0.0323
+2026-04-08 15:14:45,177 INFO: cougar_04-horse_03, geo_err: 0.0322
+2026-04-08 15:14:45,603 INFO: cougar_04-horse_04, geo_err: 0.0425
+2026-04-08 15:14:46,850 INFO: cougar_04-horse_05, geo_err: 0.0537
+2026-04-08 15:14:47,229 INFO: cougar_04-horse_06, geo_err: 0.0383
+2026-04-08 15:14:48,439 INFO: cougar_04-horse_07, geo_err: 0.0286
+2026-04-08 15:14:48,833 INFO: cougar_04-horse_08, geo_err: 0.0319
+2026-04-08 15:14:50,075 INFO: cougar_04-horse_09, geo_err: 0.0411
+2026-04-08 15:14:50,466 INFO: cougar_04-horse_10, geo_err: 0.0381
+2026-04-08 15:14:51,782 INFO: hippo_01-cougar_01, geo_err: 0.0643
+2026-04-08 15:14:52,205 INFO: hippo_01-cougar_02, geo_err: 0.0718
+2026-04-08 15:14:53,379 INFO: hippo_01-cougar_03, geo_err: 0.0731
+2026-04-08 15:14:53,793 INFO: hippo_01-cougar_04, geo_err: 0.0672
+2026-04-08 15:14:55,027 INFO: hippo_01-hippo_01, geo_err: 0.0000
+2026-04-08 15:14:55,402 INFO: hippo_01-hippo_02, geo_err: 0.0184
+2026-04-08 15:14:56,671 INFO: hippo_01-hippo_03, geo_err: 0.0223
+2026-04-08 15:14:57,125 INFO: hippo_01-hippo_04, geo_err: 0.0190
+2026-04-08 15:14:58,332 INFO: hippo_01-hippo_05, geo_err: 0.0243
+2026-04-08 15:14:58,705 INFO: hippo_01-hippo_06, geo_err: 0.0122
+2026-04-08 15:14:59,940 INFO: hippo_01-horse_01, geo_err: 0.0584
+2026-04-08 15:15:00,314 INFO: hippo_01-horse_02, geo_err: 0.0560
+2026-04-08 15:15:01,536 INFO: hippo_01-horse_03, geo_err: 0.0534
+2026-04-08 15:15:01,978 INFO: hippo_01-horse_04, geo_err: 0.0698
+2026-04-08 15:15:03,152 INFO: hippo_01-horse_05, geo_err: 0.0960
+2026-04-08 15:15:03,540 INFO: hippo_01-horse_06, geo_err: 0.0642
+2026-04-08 15:15:04,796 INFO: hippo_01-horse_07, geo_err: 0.0613
+2026-04-08 15:15:05,218 INFO: hippo_01-horse_08, geo_err: 0.0537
+2026-04-08 15:15:06,362 INFO: hippo_01-horse_09, geo_err: 0.0519
+2026-04-08 15:15:06,749 INFO: hippo_01-horse_10, geo_err: 0.0513
+2026-04-08 15:15:08,071 INFO: hippo_02-cougar_01, geo_err: 0.0865
+2026-04-08 15:15:08,440 INFO: hippo_02-cougar_02, geo_err: 0.0817
+2026-04-08 15:15:09,666 INFO: hippo_02-cougar_03, geo_err: 0.0907
+2026-04-08 15:15:10,056 INFO: hippo_02-cougar_04, geo_err: 0.0775
+2026-04-08 15:15:11,354 INFO: hippo_02-hippo_01, geo_err: 0.0183
+2026-04-08 15:15:11,771 INFO: hippo_02-hippo_02, geo_err: 0.0000
+2026-04-08 15:15:13,036 INFO: hippo_02-hippo_03, geo_err: 0.0306
+2026-04-08 15:15:13,444 INFO: hippo_02-hippo_04, geo_err: 0.0280
+2026-04-08 15:15:14,693 INFO: hippo_02-hippo_05, geo_err: 0.0263
+2026-04-08 15:15:15,099 INFO: hippo_02-hippo_06, geo_err: 0.0202
+2026-04-08 15:15:16,321 INFO: hippo_02-horse_01, geo_err: 0.0640
+2026-04-08 15:15:16,705 INFO: hippo_02-horse_02, geo_err: 0.0671
+2026-04-08 15:15:17,975 INFO: hippo_02-horse_03, geo_err: 0.0658
+2026-04-08 15:15:18,407 INFO: hippo_02-horse_04, geo_err: 0.0791
+2026-04-08 15:15:19,690 INFO: hippo_02-horse_05, geo_err: 0.0966
+2026-04-08 15:15:20,082 INFO: hippo_02-horse_06, geo_err: 0.0728
+2026-04-08 15:15:21,327 INFO: hippo_02-horse_07, geo_err: 0.0739
+2026-04-08 15:15:21,745 INFO: hippo_02-horse_08, geo_err: 0.0691
+2026-04-08 15:15:22,978 INFO: hippo_02-horse_09, geo_err: 0.0657
+2026-04-08 15:15:23,415 INFO: hippo_02-horse_10, geo_err: 0.0646
+2026-04-08 15:15:24,689 INFO: hippo_03-cougar_01, geo_err: 0.0584
+2026-04-08 15:15:25,078 INFO: hippo_03-cougar_02, geo_err: 0.0789
+2026-04-08 15:15:26,260 INFO: hippo_03-cougar_03, geo_err: 0.0772
+2026-04-08 15:15:26,652 INFO: hippo_03-cougar_04, geo_err: 0.0762
+2026-04-08 15:15:27,906 INFO: hippo_03-hippo_01, geo_err: 0.0254
+2026-04-08 15:15:28,294 INFO: hippo_03-hippo_02, geo_err: 0.0319
+2026-04-08 15:15:29,578 INFO: hippo_03-hippo_03, geo_err: 0.0000
+2026-04-08 15:15:29,973 INFO: hippo_03-hippo_04, geo_err: 0.0206
+2026-04-08 15:15:31,177 INFO: hippo_03-hippo_05, geo_err: 0.0187
+2026-04-08 15:15:31,572 INFO: hippo_03-hippo_06, geo_err: 0.0295
+2026-04-08 15:15:32,806 INFO: hippo_03-horse_01, geo_err: 0.0687
+2026-04-08 15:15:33,198 INFO: hippo_03-horse_02, geo_err: 0.0739
+2026-04-08 15:15:34,432 INFO: hippo_03-horse_03, geo_err: 0.0684
+2026-04-08 15:15:34,812 INFO: hippo_03-horse_04, geo_err: 0.0765
+2026-04-08 15:15:36,055 INFO: hippo_03-horse_05, geo_err: 0.0925
+2026-04-08 15:15:36,438 INFO: hippo_03-horse_06, geo_err: 0.0762
+2026-04-08 15:15:37,688 INFO: hippo_03-horse_07, geo_err: 0.0768
+2026-04-08 15:15:38,084 INFO: hippo_03-horse_08, geo_err: 0.0664
+2026-04-08 15:15:39,334 INFO: hippo_03-horse_09, geo_err: 0.0664
+2026-04-08 15:15:39,720 INFO: hippo_03-horse_10, geo_err: 0.0688
+2026-04-08 15:15:41,006 INFO: hippo_04-cougar_01, geo_err: 0.0571
+2026-04-08 15:15:41,382 INFO: hippo_04-cougar_02, geo_err: 0.0680
+2026-04-08 15:15:42,559 INFO: hippo_04-cougar_03, geo_err: 0.0654
+2026-04-08 15:15:42,960 INFO: hippo_04-cougar_04, geo_err: 0.0709
+2026-04-08 15:15:44,188 INFO: hippo_04-hippo_01, geo_err: 0.0195
+2026-04-08 15:15:44,575 INFO: hippo_04-hippo_02, geo_err: 0.0275
+2026-04-08 15:15:45,853 INFO: hippo_04-hippo_03, geo_err: 0.0193
+2026-04-08 15:15:46,239 INFO: hippo_04-hippo_04, geo_err: 0.0000
+2026-04-08 15:15:47,524 INFO: hippo_04-hippo_05, geo_err: 0.0177
+2026-04-08 15:15:47,913 INFO: hippo_04-hippo_06, geo_err: 0.0268
+2026-04-08 15:15:49,183 INFO: hippo_04-horse_01, geo_err: 0.0551
+2026-04-08 15:15:49,557 INFO: hippo_04-horse_02, geo_err: 0.0506
+2026-04-08 15:15:50,845 INFO: hippo_04-horse_03, geo_err: 0.0557
+2026-04-08 15:15:51,225 INFO: hippo_04-horse_04, geo_err: 0.0606
+2026-04-08 15:15:52,518 INFO: hippo_04-horse_05, geo_err: 0.1355
+2026-04-08 15:15:52,886 INFO: hippo_04-horse_06, geo_err: 0.0651
+2026-04-08 15:15:54,147 INFO: hippo_04-horse_07, geo_err: 0.0693
+2026-04-08 15:15:54,507 INFO: hippo_04-horse_08, geo_err: 0.0494
+2026-04-08 15:15:55,806 INFO: hippo_04-horse_09, geo_err: 0.0498
+2026-04-08 15:15:56,169 INFO: hippo_04-horse_10, geo_err: 0.0477
+2026-04-08 15:15:57,520 INFO: hippo_05-cougar_01, geo_err: 0.0804
+2026-04-08 15:15:57,883 INFO: hippo_05-cougar_02, geo_err: 0.0851
+2026-04-08 15:15:59,062 INFO: hippo_05-cougar_03, geo_err: 0.0864
+2026-04-08 15:15:59,436 INFO: hippo_05-cougar_04, geo_err: 0.0826
+2026-04-08 15:16:00,652 INFO: hippo_05-hippo_01, geo_err: 0.0236
+2026-04-08 15:16:01,019 INFO: hippo_05-hippo_02, geo_err: 0.0244
+2026-04-08 15:16:02,276 INFO: hippo_05-hippo_03, geo_err: 0.0284
+2026-04-08 15:16:02,648 INFO: hippo_05-hippo_04, geo_err: 0.0181
+2026-04-08 15:16:03,879 INFO: hippo_05-hippo_05, geo_err: 0.0000
+2026-04-08 15:16:04,249 INFO: hippo_05-hippo_06, geo_err: 0.0305
+2026-04-08 15:16:05,497 INFO: hippo_05-horse_01, geo_err: 0.0736
+2026-04-08 15:16:05,869 INFO: hippo_05-horse_02, geo_err: 0.0693
+2026-04-08 15:16:07,117 INFO: hippo_05-horse_03, geo_err: 0.0729
+2026-04-08 15:16:07,506 INFO: hippo_05-horse_04, geo_err: 0.0794
+2026-04-08 15:16:08,756 INFO: hippo_05-horse_05, geo_err: 0.1064
+2026-04-08 15:16:09,125 INFO: hippo_05-horse_06, geo_err: 0.0822
+2026-04-08 15:16:10,396 INFO: hippo_05-horse_07, geo_err: 0.0823
+2026-04-08 15:16:10,766 INFO: hippo_05-horse_08, geo_err: 0.0716
+2026-04-08 15:16:12,106 INFO: hippo_05-horse_09, geo_err: 0.0641
+2026-04-08 15:16:12,478 INFO: hippo_05-horse_10, geo_err: 0.0631
+2026-04-08 15:16:13,737 INFO: hippo_06-cougar_01, geo_err: 0.0596
+2026-04-08 15:16:14,116 INFO: hippo_06-cougar_02, geo_err: 0.0676
+2026-04-08 15:16:15,245 INFO: hippo_06-cougar_03, geo_err: 0.0737
+2026-04-08 15:16:15,667 INFO: hippo_06-cougar_04, geo_err: 0.0619
+2026-04-08 15:16:16,904 INFO: hippo_06-hippo_01, geo_err: 0.0113
+2026-04-08 15:16:17,271 INFO: hippo_06-hippo_02, geo_err: 0.0185
+2026-04-08 15:16:18,487 INFO: hippo_06-hippo_03, geo_err: 0.0276
+2026-04-08 15:16:18,862 INFO: hippo_06-hippo_04, geo_err: 0.0263
+2026-04-08 15:16:20,084 INFO: hippo_06-hippo_05, geo_err: 0.0295
+2026-04-08 15:16:20,459 INFO: hippo_06-hippo_06, geo_err: 0.0000
+2026-04-08 15:16:21,715 INFO: hippo_06-horse_01, geo_err: 0.0556
+2026-04-08 15:16:22,086 INFO: hippo_06-horse_02, geo_err: 0.0547
+2026-04-08 15:16:23,205 INFO: hippo_06-horse_03, geo_err: 0.0482
+2026-04-08 15:16:23,586 INFO: hippo_06-horse_04, geo_err: 0.0657
+2026-04-08 15:16:24,814 INFO: hippo_06-horse_05, geo_err: 0.0974
+2026-04-08 15:16:25,186 INFO: hippo_06-horse_06, geo_err: 0.0677
+2026-04-08 15:16:26,425 INFO: hippo_06-horse_07, geo_err: 0.0610
+2026-04-08 15:16:26,805 INFO: hippo_06-horse_08, geo_err: 0.0575
+2026-04-08 15:16:28,021 INFO: hippo_06-horse_09, geo_err: 0.0574
+2026-04-08 15:16:28,391 INFO: hippo_06-horse_10, geo_err: 0.0463
+2026-04-08 15:16:29,684 INFO: horse_01-cougar_01, geo_err: 0.0361
+2026-04-08 15:16:30,057 INFO: horse_01-cougar_02, geo_err: 0.0384
+2026-04-08 15:16:31,190 INFO: horse_01-cougar_03, geo_err: 0.0405
+2026-04-08 15:16:31,566 INFO: horse_01-cougar_04, geo_err: 0.0337
+2026-04-08 15:16:32,815 INFO: horse_01-hippo_01, geo_err: 0.0462
+2026-04-08 15:16:33,190 INFO: horse_01-hippo_02, geo_err: 0.0556
+2026-04-08 15:16:34,442 INFO: horse_01-hippo_03, geo_err: 0.0709
+2026-04-08 15:16:34,815 INFO: horse_01-hippo_04, geo_err: 0.0462
+2026-04-08 15:16:36,047 INFO: horse_01-hippo_05, geo_err: 0.0459
+2026-04-08 15:16:36,422 INFO: horse_01-hippo_06, geo_err: 0.0451
+2026-04-08 15:16:37,675 INFO: horse_01-horse_01, geo_err: 0.0000
+2026-04-08 15:16:38,045 INFO: horse_01-horse_02, geo_err: 0.0205
+2026-04-08 15:16:39,292 INFO: horse_01-horse_03, geo_err: 0.0165
+2026-04-08 15:16:39,665 INFO: horse_01-horse_04, geo_err: 0.0230
+2026-04-08 15:16:40,936 INFO: horse_01-horse_05, geo_err: 0.0388
+2026-04-08 15:16:41,314 INFO: horse_01-horse_06, geo_err: 0.0227
+2026-04-08 15:16:42,581 INFO: horse_01-horse_07, geo_err: 0.0206
+2026-04-08 15:16:42,947 INFO: horse_01-horse_08, geo_err: 0.0174
+2026-04-08 15:16:44,189 INFO: horse_01-horse_09, geo_err: 0.0168
+2026-04-08 15:16:44,562 INFO: horse_01-horse_10, geo_err: 0.0200
+2026-04-08 15:16:45,906 INFO: horse_02-cougar_01, geo_err: 0.0369
+2026-04-08 15:16:46,298 INFO: horse_02-cougar_02, geo_err: 0.0377
+2026-04-08 15:16:47,407 INFO: horse_02-cougar_03, geo_err: 0.0382
+2026-04-08 15:16:47,783 INFO: horse_02-cougar_04, geo_err: 0.0382
+2026-04-08 15:16:49,038 INFO: horse_02-hippo_01, geo_err: 0.0412
+2026-04-08 15:16:49,410 INFO: horse_02-hippo_02, geo_err: 0.0577
+2026-04-08 15:16:50,672 INFO: horse_02-hippo_03, geo_err: 0.0725
+2026-04-08 15:16:51,057 INFO: horse_02-hippo_04, geo_err: 0.0443
+2026-04-08 15:16:52,300 INFO: horse_02-hippo_05, geo_err: 0.0516
+2026-04-08 15:16:52,684 INFO: horse_02-hippo_06, geo_err: 0.0435
+2026-04-08 15:16:53,924 INFO: horse_02-horse_01, geo_err: 0.0184
+2026-04-08 15:16:54,338 INFO: horse_02-horse_02, geo_err: 0.0000
+2026-04-08 15:16:55,546 INFO: horse_02-horse_03, geo_err: 0.0115
+2026-04-08 15:16:55,920 INFO: horse_02-horse_04, geo_err: 0.0180
+2026-04-08 15:16:57,175 INFO: horse_02-horse_05, geo_err: 0.0322
+2026-04-08 15:16:57,586 INFO: horse_02-horse_06, geo_err: 0.0209
+2026-04-08 15:16:58,808 INFO: horse_02-horse_07, geo_err: 0.0232
+2026-04-08 15:16:59,226 INFO: horse_02-horse_08, geo_err: 0.0136
+2026-04-08 15:17:00,453 INFO: horse_02-horse_09, geo_err: 0.0162
+2026-04-08 15:17:00,869 INFO: horse_02-horse_10, geo_err: 0.0184
+2026-04-08 15:17:02,130 INFO: horse_03-cougar_01, geo_err: 0.0343
+2026-04-08 15:17:02,546 INFO: horse_03-cougar_02, geo_err: 0.0387
+2026-04-08 15:17:03,661 INFO: horse_03-cougar_03, geo_err: 0.0413
+2026-04-08 15:17:04,035 INFO: horse_03-cougar_04, geo_err: 0.0352
+2026-04-08 15:17:05,264 INFO: horse_03-hippo_01, geo_err: 0.0404
+2026-04-08 15:17:05,640 INFO: horse_03-hippo_02, geo_err: 0.0532
+2026-04-08 15:17:06,903 INFO: horse_03-hippo_03, geo_err: 0.0686
+2026-04-08 15:17:07,324 INFO: horse_03-hippo_04, geo_err: 0.0475
+2026-04-08 15:17:08,584 INFO: horse_03-hippo_05, geo_err: 0.0456
+2026-04-08 15:17:08,956 INFO: horse_03-hippo_06, geo_err: 0.0405
+2026-04-08 15:17:10,213 INFO: horse_03-horse_01, geo_err: 0.0160
+2026-04-08 15:17:10,583 INFO: horse_03-horse_02, geo_err: 0.0139
+2026-04-08 15:17:11,805 INFO: horse_03-horse_03, geo_err: 0.0000
+2026-04-08 15:17:12,224 INFO: horse_03-horse_04, geo_err: 0.0273
+2026-04-08 15:17:13,448 INFO: horse_03-horse_05, geo_err: 0.0311
+2026-04-08 15:17:13,856 INFO: horse_03-horse_06, geo_err: 0.0169
+2026-04-08 15:17:15,046 INFO: horse_03-horse_07, geo_err: 0.0224
+2026-04-08 15:17:15,425 INFO: horse_03-horse_08, geo_err: 0.0145
+2026-04-08 15:17:16,748 INFO: horse_03-horse_09, geo_err: 0.0220
+2026-04-08 15:17:17,118 INFO: horse_03-horse_10, geo_err: 0.0193
+2026-04-08 15:17:18,509 INFO: horse_04-cougar_01, geo_err: 0.0400
+2026-04-08 15:17:18,880 INFO: horse_04-cougar_02, geo_err: 0.0364
+2026-04-08 15:17:20,089 INFO: horse_04-cougar_03, geo_err: 0.0354
+2026-04-08 15:17:20,460 INFO: horse_04-cougar_04, geo_err: 0.0448
+2026-04-08 15:17:21,738 INFO: horse_04-hippo_01, geo_err: 0.0488
+2026-04-08 15:17:22,154 INFO: horse_04-hippo_02, geo_err: 0.0770
+2026-04-08 15:17:23,373 INFO: horse_04-hippo_03, geo_err: 0.0798
+2026-04-08 15:17:23,759 INFO: horse_04-hippo_04, geo_err: 0.0465
+2026-04-08 15:17:25,007 INFO: horse_04-hippo_05, geo_err: 0.0516
+2026-04-08 15:17:25,423 INFO: horse_04-hippo_06, geo_err: 0.0518
+2026-04-08 15:17:26,609 INFO: horse_04-horse_01, geo_err: 0.0210
+2026-04-08 15:17:26,989 INFO: horse_04-horse_02, geo_err: 0.0175
+2026-04-08 15:17:28,265 INFO: horse_04-horse_03, geo_err: 0.0222
+2026-04-08 15:17:28,637 INFO: horse_04-horse_04, geo_err: 0.0000
+2026-04-08 15:17:29,882 INFO: horse_04-horse_05, geo_err: 0.0429
+2026-04-08 15:17:30,258 INFO: horse_04-horse_06, geo_err: 0.0290
+2026-04-08 15:17:31,492 INFO: horse_04-horse_07, geo_err: 0.0295
+2026-04-08 15:17:31,907 INFO: horse_04-horse_08, geo_err: 0.0203
+2026-04-08 15:17:33,141 INFO: horse_04-horse_09, geo_err: 0.0175
+2026-04-08 15:17:33,534 INFO: horse_04-horse_10, geo_err: 0.0211
+2026-04-08 15:17:34,802 INFO: horse_05-cougar_01, geo_err: 0.0395
+2026-04-08 15:17:35,185 INFO: horse_05-cougar_02, geo_err: 0.0408
+2026-04-08 15:17:36,334 INFO: horse_05-cougar_03, geo_err: 0.0465
+2026-04-08 15:17:36,752 INFO: horse_05-cougar_04, geo_err: 0.0396
+2026-04-08 15:17:38,052 INFO: horse_05-hippo_01, geo_err: 0.0522
+2026-04-08 15:17:38,469 INFO: horse_05-hippo_02, geo_err: 0.0927
+2026-04-08 15:17:39,669 INFO: horse_05-hippo_03, geo_err: 0.1066
+2026-04-08 15:17:40,089 INFO: horse_05-hippo_04, geo_err: 0.1359
+2026-04-08 15:17:41,288 INFO: horse_05-hippo_05, geo_err: 0.0880
+2026-04-08 15:17:41,675 INFO: horse_05-hippo_06, geo_err: 0.0652
+2026-04-08 15:17:42,934 INFO: horse_05-horse_01, geo_err: 0.0346
+2026-04-08 15:17:43,307 INFO: horse_05-horse_02, geo_err: 0.0266
+2026-04-08 15:17:44,559 INFO: horse_05-horse_03, geo_err: 0.0290
+2026-04-08 15:17:44,936 INFO: horse_05-horse_04, geo_err: 0.0364
+2026-04-08 15:17:46,199 INFO: horse_05-horse_05, geo_err: 0.0000
+2026-04-08 15:17:46,579 INFO: horse_05-horse_06, geo_err: 0.0331
+2026-04-08 15:17:47,824 INFO: horse_05-horse_07, geo_err: 0.0340
+2026-04-08 15:17:48,204 INFO: horse_05-horse_08, geo_err: 0.0283
+2026-04-08 15:17:49,474 INFO: horse_05-horse_09, geo_err: 0.0387
+2026-04-08 15:17:49,853 INFO: horse_05-horse_10, geo_err: 0.0304
+2026-04-08 15:17:51,118 INFO: horse_06-cougar_01, geo_err: 0.0420
+2026-04-08 15:17:51,497 INFO: horse_06-cougar_02, geo_err: 0.0431
+2026-04-08 15:17:52,677 INFO: horse_06-cougar_03, geo_err: 0.0421
+2026-04-08 15:17:53,094 INFO: horse_06-cougar_04, geo_err: 0.0399
+2026-04-08 15:17:54,328 INFO: horse_06-hippo_01, geo_err: 0.0518
+2026-04-08 15:17:54,705 INFO: horse_06-hippo_02, geo_err: 0.0789
+2026-04-08 15:17:55,976 INFO: horse_06-hippo_03, geo_err: 0.0787
+2026-04-08 15:17:56,356 INFO: horse_06-hippo_04, geo_err: 0.0521
+2026-04-08 15:17:57,613 INFO: horse_06-hippo_05, geo_err: 0.0674
+2026-04-08 15:17:57,988 INFO: horse_06-hippo_06, geo_err: 0.0523
+2026-04-08 15:17:59,238 INFO: horse_06-horse_01, geo_err: 0.0213
+2026-04-08 15:17:59,613 INFO: horse_06-horse_02, geo_err: 0.0216
+2026-04-08 15:18:00,875 INFO: horse_06-horse_03, geo_err: 0.0180
+2026-04-08 15:18:01,259 INFO: horse_06-horse_04, geo_err: 0.0266
+2026-04-08 15:18:02,534 INFO: horse_06-horse_05, geo_err: 0.0323
+2026-04-08 15:18:02,911 INFO: horse_06-horse_06, geo_err: 0.0000
+2026-04-08 15:18:04,146 INFO: horse_06-horse_07, geo_err: 0.0191
+2026-04-08 15:18:04,533 INFO: horse_06-horse_08, geo_err: 0.0198
+2026-04-08 15:18:05,794 INFO: horse_06-horse_09, geo_err: 0.0283
+2026-04-08 15:18:06,212 INFO: horse_06-horse_10, geo_err: 0.0240
+2026-04-08 15:18:07,435 INFO: horse_07-cougar_01, geo_err: 0.0325
+2026-04-08 15:18:07,813 INFO: horse_07-cougar_02, geo_err: 0.0363
+2026-04-08 15:18:09,020 INFO: horse_07-cougar_03, geo_err: 0.0371
+2026-04-08 15:18:09,395 INFO: horse_07-cougar_04, geo_err: 0.0287
+2026-04-08 15:18:10,695 INFO: horse_07-hippo_01, geo_err: 0.0455
+2026-04-08 15:18:11,070 INFO: horse_07-hippo_02, geo_err: 0.0597
+2026-04-08 15:18:12,368 INFO: horse_07-hippo_03, geo_err: 0.0775
+2026-04-08 15:18:12,742 INFO: horse_07-hippo_04, geo_err: 0.0511
+2026-04-08 15:18:14,048 INFO: horse_07-hippo_05, geo_err: 0.0607
+2026-04-08 15:18:14,424 INFO: horse_07-hippo_06, geo_err: 0.0489
+2026-04-08 15:18:15,658 INFO: horse_07-horse_01, geo_err: 0.0177
+2026-04-08 15:18:16,035 INFO: horse_07-horse_02, geo_err: 0.0216
+2026-04-08 15:18:17,295 INFO: horse_07-horse_03, geo_err: 0.0185
+2026-04-08 15:18:17,667 INFO: horse_07-horse_04, geo_err: 0.0283
+2026-04-08 15:18:18,920 INFO: horse_07-horse_05, geo_err: 0.0323
+2026-04-08 15:18:19,307 INFO: horse_07-horse_06, geo_err: 0.0178
+2026-04-08 15:18:20,592 INFO: horse_07-horse_07, geo_err: 0.0000
+2026-04-08 15:18:20,983 INFO: horse_07-horse_08, geo_err: 0.0208
+2026-04-08 15:18:22,258 INFO: horse_07-horse_09, geo_err: 0.0284
+2026-04-08 15:18:22,630 INFO: horse_07-horse_10, geo_err: 0.0234
+2026-04-08 15:18:23,835 INFO: horse_08-cougar_01, geo_err: 0.0317
+2026-04-08 15:18:24,209 INFO: horse_08-cougar_02, geo_err: 0.0339
+2026-04-08 15:18:25,422 INFO: horse_08-cougar_03, geo_err: 0.0336
+2026-04-08 15:18:25,794 INFO: horse_08-cougar_04, geo_err: 0.0338
+2026-04-08 15:18:27,053 INFO: horse_08-hippo_01, geo_err: 0.0445
+2026-04-08 15:18:27,445 INFO: horse_08-hippo_02, geo_err: 0.0583
+2026-04-08 15:18:28,688 INFO: horse_08-hippo_03, geo_err: 0.0760
+2026-04-08 15:18:29,061 INFO: horse_08-hippo_04, geo_err: 0.0457
+2026-04-08 15:18:30,288 INFO: horse_08-hippo_05, geo_err: 0.0550
+2026-04-08 15:18:30,663 INFO: horse_08-hippo_06, geo_err: 0.0457
+2026-04-08 15:18:31,902 INFO: horse_08-horse_01, geo_err: 0.0173
+2026-04-08 15:18:32,322 INFO: horse_08-horse_02, geo_err: 0.0144
+2026-04-08 15:18:33,529 INFO: horse_08-horse_03, geo_err: 0.0157
+2026-04-08 15:18:33,908 INFO: horse_08-horse_04, geo_err: 0.0195
+2026-04-08 15:18:35,158 INFO: horse_08-horse_05, geo_err: 0.0337
+2026-04-08 15:18:35,535 INFO: horse_08-horse_06, geo_err: 0.0229
+2026-04-08 15:18:36,761 INFO: horse_08-horse_07, geo_err: 0.0227
+2026-04-08 15:18:37,180 INFO: horse_08-horse_08, geo_err: 0.0000
+2026-04-08 15:18:38,433 INFO: horse_08-horse_09, geo_err: 0.0157
+2026-04-08 15:18:38,839 INFO: horse_08-horse_10, geo_err: 0.0219
+2026-04-08 15:18:40,133 INFO: horse_09-cougar_01, geo_err: 0.0383
+2026-04-08 15:18:40,507 INFO: horse_09-cougar_02, geo_err: 0.0546
+2026-04-08 15:18:41,696 INFO: horse_09-cougar_03, geo_err: 0.0501
+2026-04-08 15:18:42,106 INFO: horse_09-cougar_04, geo_err: 0.0396
+2026-04-08 15:18:43,340 INFO: horse_09-hippo_01, geo_err: 0.0468
+2026-04-08 15:18:43,761 INFO: horse_09-hippo_02, geo_err: 0.0601
+2026-04-08 15:18:45,019 INFO: horse_09-hippo_03, geo_err: 0.0757
+2026-04-08 15:18:45,437 INFO: horse_09-hippo_04, geo_err: 0.0459
+2026-04-08 15:18:46,663 INFO: horse_09-hippo_05, geo_err: 0.0506
+2026-04-08 15:18:47,081 INFO: horse_09-hippo_06, geo_err: 0.0506
+2026-04-08 15:18:48,302 INFO: horse_09-horse_01, geo_err: 0.0169
+2026-04-08 15:18:48,678 INFO: horse_09-horse_02, geo_err: 0.0165
+2026-04-08 15:18:49,915 INFO: horse_09-horse_03, geo_err: 0.0224
+2026-04-08 15:18:50,291 INFO: horse_09-horse_04, geo_err: 0.0185
+2026-04-08 15:18:51,530 INFO: horse_09-horse_05, geo_err: 0.0430
+2026-04-08 15:18:51,918 INFO: horse_09-horse_06, geo_err: 0.0258
+2026-04-08 15:18:53,199 INFO: horse_09-horse_07, geo_err: 0.0273
+2026-04-08 15:18:53,615 INFO: horse_09-horse_08, geo_err: 0.0158
+2026-04-08 15:18:54,826 INFO: horse_09-horse_09, geo_err: 0.0000
+2026-04-08 15:18:55,245 INFO: horse_09-horse_10, geo_err: 0.0217
+2026-04-08 15:18:56,529 INFO: horse_10-cougar_01, geo_err: 0.0417
+2026-04-08 15:18:56,950 INFO: horse_10-cougar_02, geo_err: 0.0508
+2026-04-08 15:18:58,052 INFO: horse_10-cougar_03, geo_err: 0.0493
+2026-04-08 15:18:58,442 INFO: horse_10-cougar_04, geo_err: 0.0398
+2026-04-08 15:18:59,718 INFO: horse_10-hippo_01, geo_err: 0.0427
+2026-04-08 15:19:00,112 INFO: horse_10-hippo_02, geo_err: 0.0554
+2026-04-08 15:19:01,380 INFO: horse_10-hippo_03, geo_err: 0.0713
+2026-04-08 15:19:01,822 INFO: horse_10-hippo_04, geo_err: 0.0419
+2026-04-08 15:19:03,054 INFO: horse_10-hippo_05, geo_err: 0.0433
+2026-04-08 15:19:03,431 INFO: horse_10-hippo_06, geo_err: 0.0467
+2026-04-08 15:19:04,675 INFO: horse_10-horse_01, geo_err: 0.0174
+2026-04-08 15:19:05,090 INFO: horse_10-horse_02, geo_err: 0.0158
+2026-04-08 15:19:06,317 INFO: horse_10-horse_03, geo_err: 0.0155
+2026-04-08 15:19:06,733 INFO: horse_10-horse_04, geo_err: 0.0208
+2026-04-08 15:19:08,068 INFO: horse_10-horse_05, geo_err: 0.0309
+2026-04-08 15:19:08,446 INFO: horse_10-horse_06, geo_err: 0.0262
+2026-04-08 15:19:09,567 INFO: horse_10-horse_07, geo_err: 0.0244
+2026-04-08 15:19:09,941 INFO: horse_10-horse_08, geo_err: 0.0196
+2026-04-08 15:19:11,200 INFO: horse_10-horse_09, geo_err: 0.0187
+2026-04-08 15:19:11,572 INFO: horse_10-horse_10, geo_err: 0.0000
+2026-04-08 15:19:11,603 INFO: Avg time: 0.0827
+2026-04-08 15:19:11,807 INFO: Val auc: 0.6520
+2026-04-08 15:19:11,807 INFO: Val avg error: 0.0430
