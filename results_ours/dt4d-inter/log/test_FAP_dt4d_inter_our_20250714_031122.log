@@ -1,0 +1,1355 @@
+2025-07-14 03:11:22,206 INFO: 
+Version Information: 
+	Python: 3.8.20
+	PyTorch: 2.0.0+cu118
+	TorchVision: 0.15.0+cu118
+2025-07-14 03:11:22,206 INFO: 
+  name: FAP_dt4d_inter_our
+  backend: dp
+  type: FAPModel
+  num_gpu: 1
+  gpu_idx: 0
+  manual_seed: 1234
+  refine: 0
+  non-isometric: True
+  partial: False
+  visualize: True
+  data_name: dt4d
+  path:[
+    resume_state: checkpoints_ours/dt4d.pth
+    resume: False
+    results_root: /mnt/zj-gpfs/home/luofeifan/shape_correspondence/DeepFAFP_main/results/FAP_dt4d_inter_our
+    log: /mnt/zj-gpfs/home/luofeifan/shape_correspondence/DeepFAFP_main/results/FAP_dt4d_inter_our/log
+    visualization: /mnt/zj-gpfs/home/luofeifan/shape_correspondence/DeepFAFP_main/results/FAP_dt4d_inter_our/visualization
+  ]
+  datasets:[
+    test_dataset:[
+      name: Val
+      type: PairDT4DDataset
+      phase: test
+      data_root: ../data/DT4D_r/
+      inter_class: True
+      return_evecs: True
+      return_faces: True
+      num_evecs: 200
+      return_corr: True
+      return_dist: True
+    ]
+  ]
+  networks:[
+    feature_extractor:[
+      type: DiffusionNet
+      in_channels: 128
+      out_channels: 256
+      cache_dir: ../data/DT4D_r/diffusion
+      input_type: wks
+    ]
+    fmap_net:[
+      type: RegularizedFMNet
+      bidirectional: True
+    ]
+    permutation:[
+      type: Similarity
+      tau: 0.07
+      hard: True
+    ]
+    conv:[
+      type: Learned_Fliters
+      Poly_Type: JacobiConv
+      orders: 8
+      alpha: 1.0
+      learnable_bases: True
+      learnable_alphas: True
+      normalized_bases: True
+      a: 1.0
+      b: 1.0
+    ]
+    comb:[
+      type: Combination
+      orders_basis: 8
+      output_channels: 6
+    ]
+  ]
+  train:[
+    total_epochs: None
+    optims:[
+      feature_extractor:[
+        type: Adam
+        lr: 0.001
+      ]
+      conv:[
+        type: Adam
+        lr: 0.001
+      ]
+      comb:[
+        type: Adam
+        lr: 0.001
+      ]
+    ]
+    schedulers:[
+      feature_extractor:[
+        type: none
+      ]
+      conv:[
+        type: none
+      ]
+      comb:[
+        type: none
+      ]
+    ]
+    losses:[
+      surfmnet_loss:[
+        type: SURFMNetLoss
+        w_bij: 1.0
+        w_orth: 1.0
+        w_lap: 0.0
+      ]
+      align_loss:[
+        type: SquaredFrobeniusLoss
+        loss_weight: 1.0
+      ]
+      dirichlet_loss:[
+        type: DirichletLoss
+        loss_weight: 10.0
+      ]
+    ]
+  ]
+  val:[
+    metrics:[
+      geo_error:[
+        type: calculate_geodesic_error
+      ]
+      plot_pck:[
+        type: plot_pck
+      ]
+    ]
+  ]
+  is_train: False
+  dist: False
+  rank: 0
+  world_size: 1
+
+2025-07-14 03:11:22,224 INFO: Dataset [PairDT4DDataset]-[Val] is built.
+2025-07-14 03:11:22,224 INFO: Number of test images in Val: 1200
+2025-07-14 03:11:22,256 INFO: Network [DiffusionNet] is created.
+2025-07-14 03:11:22,256 INFO: Network [RegularizedFMNet] is created.
+2025-07-14 03:11:22,256 INFO: Network [Similarity] is created.
+2025-07-14 03:11:22,256 INFO: Network [Learned_Fliters] is created.
+2025-07-14 03:11:22,256 INFO: Network [Combination] is created.
+2025-07-14 03:11:24,494 INFO: Network: DiffusionNet, with parameters: 510,336
+2025-07-14 03:11:24,494 INFO: Network: RegularizedFMNet, with parameters: 0
+2025-07-14 03:11:24,494 INFO: Network: Similarity, with parameters: 0
+2025-07-14 03:11:24,494 INFO: Network: Learned_Fliters, with parameters: 10
+2025-07-14 03:11:24,494 INFO: Network: Combination, with parameters: 48
+2025-07-14 03:11:24,495 INFO: Metric [function] is created.
+2025-07-14 03:11:24,495 INFO: Metric [function] is created.
+2025-07-14 03:11:26,358 INFO: Resuming network: feature_extractor
+2025-07-14 03:11:26,358 INFO: Network fmap_net has no param. Ignore it.
+2025-07-14 03:11:26,358 INFO: Network permutation has no param. Ignore it.
+2025-07-14 03:11:26,358 INFO: Resuming network: conv
+2025-07-14 03:11:26,359 INFO: Resuming network: comb
+2025-07-14 03:11:26,359 INFO: Model [FAPModel] is created.
+2025-07-14 03:11:26,359 INFO: Testing PairDT4DDataset...
+2025-07-14 03:11:30,482 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp183, geo_err: 0.0368
+2025-07-14 03:11:31,251 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp189, geo_err: 0.0371
+2025-07-14 03:11:32,566 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp194, geo_err: 0.0369
+2025-07-14 03:11:33,415 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp200, geo_err: 0.0372
+2025-07-14 03:11:35,298 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp205, geo_err: 0.0380
+2025-07-14 03:11:36,101 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp211, geo_err: 0.0373
+2025-07-14 03:11:37,913 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp216, geo_err: 0.0369
+2025-07-14 03:11:38,740 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp222, geo_err: 0.0372
+2025-07-14 03:11:40,516 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp244, geo_err: 0.0371
+2025-07-14 03:11:41,400 INFO: Standing2HMagicAttack01034-InvertedDoubleKickToKipUp255, geo_err: 0.0373
+2025-07-14 03:11:43,159 INFO: Standing2HMagicAttack01034-Running043, geo_err: 0.0278
+2025-07-14 03:11:43,964 INFO: Standing2HMagicAttack01034-Running044, geo_err: 0.0271
+2025-07-14 03:11:45,764 INFO: Standing2HMagicAttack01034-Running045, geo_err: 0.0268
+2025-07-14 03:11:46,576 INFO: Standing2HMagicAttack01034-Running046, geo_err: 0.0269
+2025-07-14 03:11:48,443 INFO: Standing2HMagicAttack01034-Running047, geo_err: 0.0273
+2025-07-14 03:11:49,255 INFO: Standing2HMagicAttack01034-Running048, geo_err: 0.0284
+2025-07-14 03:11:50,929 INFO: Standing2HMagicAttack01034-Running049, geo_err: 0.0287
+2025-07-14 03:11:51,753 INFO: Standing2HMagicAttack01034-StandingCoverTurn007, geo_err: 0.0277
+2025-07-14 03:11:53,610 INFO: Standing2HMagicAttack01034-StandingCoverTurn015, geo_err: 0.0276
+2025-07-14 03:11:54,439 INFO: Standing2HMagicAttack01034-StandingCoverTurn030, geo_err: 0.0286
+2025-07-14 03:11:56,149 INFO: Standing2HMagicAttack01034-BrooklynUprock134, geo_err: 0.0363
+2025-07-14 03:11:56,972 INFO: Standing2HMagicAttack01034-BrooklynUprock140, geo_err: 0.0403
+2025-07-14 03:11:58,764 INFO: Standing2HMagicAttack01034-BrooklynUprock146, geo_err: 0.0373
+2025-07-14 03:11:59,590 INFO: Standing2HMagicAttack01034-Floating007, geo_err: 0.0369
+2025-07-14 03:12:01,398 INFO: Standing2HMagicAttack01034-Floating029, geo_err: 0.0367
+2025-07-14 03:12:02,245 INFO: Standing2HMagicAttack01034-Floating099, geo_err: 0.0364
+2025-07-14 03:12:04,004 INFO: Standing2HMagicAttack01034-KettlebellSwing020, geo_err: 0.0379
+2025-07-14 03:12:04,913 INFO: Standing2HMagicAttack01034-KettlebellSwing047, geo_err: 0.0399
+2025-07-14 03:12:06,607 INFO: Standing2HMagicAttack01034-KettlebellSwing057, geo_err: 0.0410
+2025-07-14 03:12:07,450 INFO: Standing2HMagicAttack01034-ShortLeftSideStep006, geo_err: 0.0365
+2025-07-14 03:12:09,155 INFO: Standing2HMagicAttack01034-Falling202, geo_err: 0.0668
+2025-07-14 03:12:09,974 INFO: Standing2HMagicAttack01034-Falling216, geo_err: 0.0673
+2025-07-14 03:12:11,622 INFO: Standing2HMagicAttack01034-Falling230, geo_err: 0.0659
+2025-07-14 03:12:12,461 INFO: Standing2HMagicAttack01034-Falling237, geo_err: 0.0649
+2025-07-14 03:12:14,181 INFO: Standing2HMagicAttack01034-Falling257, geo_err: 0.0670
+2025-07-14 03:12:14,982 INFO: Standing2HMagicAttack01034-Falling271, geo_err: 0.0675
+2025-07-14 03:12:16,679 INFO: Standing2HMagicAttack01034-Falling313, geo_err: 0.0677
+2025-07-14 03:12:17,476 INFO: Standing2HMagicAttack01034-Strafing000, geo_err: 0.0697
+2025-07-14 03:12:19,173 INFO: Standing2HMagicAttack01034-Strafing009, geo_err: 0.0687
+2025-07-14 03:12:19,972 INFO: Standing2HMagicAttack01034-Strafing024, geo_err: 0.0678
+2025-07-14 03:12:21,618 INFO: Standing2HMagicAttack01034-GoalkeeperScoop044, geo_err: 0.0624
+2025-07-14 03:12:22,409 INFO: Standing2HMagicAttack01034-GoalkeeperScoop046, geo_err: 0.0609
+2025-07-14 03:12:24,116 INFO: Standing2HMagicAttack01034-GoalkeeperScoop049, geo_err: 0.0603
+2025-07-14 03:12:24,952 INFO: Standing2HMagicAttack01034-GoalkeeperScoop052, geo_err: 0.0608
+2025-07-14 03:12:26,694 INFO: Standing2HMagicAttack01034-GoalkeeperScoop055, geo_err: 0.0606
+2025-07-14 03:12:27,496 INFO: Standing2HMagicAttack01034-GoalkeeperScoop058, geo_err: 0.0613
+2025-07-14 03:12:29,153 INFO: Standing2HMagicAttack01034-GoalkeeperScoop061, geo_err: 0.0631
+2025-07-14 03:12:29,961 INFO: Standing2HMagicAttack01034-GoalkeeperScoop065, geo_err: 0.0636
+2025-07-14 03:12:31,609 INFO: Standing2HMagicAttack01034-GoalkeeperScoop069, geo_err: 0.0642
+2025-07-14 03:12:32,426 INFO: Standing2HMagicAttack01034-GoalkeeperScoop078, geo_err: 0.0601
+2025-07-14 03:12:34,107 INFO: Standing2HMagicAttack01034-DancingRunningMan259, geo_err: 0.0278
+2025-07-14 03:12:34,915 INFO: Standing2HMagicAttack01034-DancingRunningMan265, geo_err: 0.0286
+2025-07-14 03:12:36,559 INFO: Standing2HMagicAttack01034-DancingRunningMan272, geo_err: 0.0305
+2025-07-14 03:12:37,371 INFO: Standing2HMagicAttack01034-DancingRunningMan279, geo_err: 0.0274
+2025-07-14 03:12:39,134 INFO: Standing2HMagicAttack01034-DancingRunningMan285, geo_err: 0.0273
+2025-07-14 03:12:39,982 INFO: Standing2HMagicAttack01034-DancingRunningMan292, geo_err: 0.0284
+2025-07-14 03:12:41,675 INFO: Standing2HMagicAttack01034-DancingRunningMan298, geo_err: 0.0282
+2025-07-14 03:12:42,508 INFO: Standing2HMagicAttack01034-DancingRunningMan305, geo_err: 0.0272
+2025-07-14 03:12:44,130 INFO: Standing2HMagicAttack01034-DancingRunningMan312, geo_err: 0.0278
+2025-07-14 03:12:44,945 INFO: Standing2HMagicAttack01034-DancingRunningMan325, geo_err: 0.0271
+2025-07-14 03:12:46,604 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp183, geo_err: 0.0391
+2025-07-14 03:12:47,424 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp189, geo_err: 0.0388
+2025-07-14 03:12:49,131 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp194, geo_err: 0.0392
+2025-07-14 03:12:49,949 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp200, geo_err: 0.0399
+2025-07-14 03:12:51,656 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp205, geo_err: 0.0407
+2025-07-14 03:12:52,476 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp211, geo_err: 0.0393
+2025-07-14 03:12:54,166 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp216, geo_err: 0.0391
+2025-07-14 03:12:54,986 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp222, geo_err: 0.0394
+2025-07-14 03:12:56,597 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp244, geo_err: 0.0394
+2025-07-14 03:12:57,405 INFO: Standing2HMagicAttack01036-InvertedDoubleKickToKipUp255, geo_err: 0.0395
+2025-07-14 03:12:59,021 INFO: Standing2HMagicAttack01036-Running043, geo_err: 0.0304
+2025-07-14 03:12:59,823 INFO: Standing2HMagicAttack01036-Running044, geo_err: 0.0299
+2025-07-14 03:13:01,592 INFO: Standing2HMagicAttack01036-Running045, geo_err: 0.0297
+2025-07-14 03:13:02,408 INFO: Standing2HMagicAttack01036-Running046, geo_err: 0.0297
+2025-07-14 03:13:04,154 INFO: Standing2HMagicAttack01036-Running047, geo_err: 0.0303
+2025-07-14 03:13:05,014 INFO: Standing2HMagicAttack01036-Running048, geo_err: 0.0312
+2025-07-14 03:13:06,627 INFO: Standing2HMagicAttack01036-Running049, geo_err: 0.0314
+2025-07-14 03:13:07,573 INFO: Standing2HMagicAttack01036-StandingCoverTurn007, geo_err: 0.0293
+2025-07-14 03:13:09,259 INFO: Standing2HMagicAttack01036-StandingCoverTurn015, geo_err: 0.0297
+2025-07-14 03:13:10,065 INFO: Standing2HMagicAttack01036-StandingCoverTurn030, geo_err: 0.0307
+2025-07-14 03:13:11,853 INFO: Standing2HMagicAttack01036-BrooklynUprock134, geo_err: 0.0389
+2025-07-14 03:13:12,684 INFO: Standing2HMagicAttack01036-BrooklynUprock140, geo_err: 0.0432
+2025-07-14 03:13:14,508 INFO: Standing2HMagicAttack01036-BrooklynUprock146, geo_err: 0.0401
+2025-07-14 03:13:15,321 INFO: Standing2HMagicAttack01036-Floating007, geo_err: 0.0397
+2025-07-14 03:13:17,130 INFO: Standing2HMagicAttack01036-Floating029, geo_err: 0.0396
+2025-07-14 03:13:17,940 INFO: Standing2HMagicAttack01036-Floating099, geo_err: 0.0401
+2025-07-14 03:13:19,659 INFO: Standing2HMagicAttack01036-KettlebellSwing020, geo_err: 0.0395
+2025-07-14 03:13:20,483 INFO: Standing2HMagicAttack01036-KettlebellSwing047, geo_err: 0.0414
+2025-07-14 03:13:22,268 INFO: Standing2HMagicAttack01036-KettlebellSwing057, geo_err: 0.0428
+2025-07-14 03:13:23,082 INFO: Standing2HMagicAttack01036-ShortLeftSideStep006, geo_err: 0.0399
+2025-07-14 03:13:24,831 INFO: Standing2HMagicAttack01036-Falling202, geo_err: 0.0708
+2025-07-14 03:13:25,651 INFO: Standing2HMagicAttack01036-Falling216, geo_err: 0.0695
+2025-07-14 03:13:27,278 INFO: Standing2HMagicAttack01036-Falling230, geo_err: 0.0680
+2025-07-14 03:13:28,098 INFO: Standing2HMagicAttack01036-Falling237, geo_err: 0.0685
+2025-07-14 03:13:29,922 INFO: Standing2HMagicAttack01036-Falling257, geo_err: 0.0695
+2025-07-14 03:13:30,757 INFO: Standing2HMagicAttack01036-Falling271, geo_err: 0.0695
+2025-07-14 03:13:32,405 INFO: Standing2HMagicAttack01036-Falling313, geo_err: 0.0697
+2025-07-14 03:13:33,157 INFO: Standing2HMagicAttack01036-Strafing000, geo_err: 0.0740
+2025-07-14 03:13:34,876 INFO: Standing2HMagicAttack01036-Strafing009, geo_err: 0.0733
+2025-07-14 03:13:35,700 INFO: Standing2HMagicAttack01036-Strafing024, geo_err: 0.0717
+2025-07-14 03:13:37,413 INFO: Standing2HMagicAttack01036-GoalkeeperScoop044, geo_err: 0.0623
+2025-07-14 03:13:38,254 INFO: Standing2HMagicAttack01036-GoalkeeperScoop046, geo_err: 0.0607
+2025-07-14 03:13:39,897 INFO: Standing2HMagicAttack01036-GoalkeeperScoop049, geo_err: 0.0614
+2025-07-14 03:13:40,710 INFO: Standing2HMagicAttack01036-GoalkeeperScoop052, geo_err: 0.0614
+2025-07-14 03:13:42,331 INFO: Standing2HMagicAttack01036-GoalkeeperScoop055, geo_err: 0.0612
+2025-07-14 03:13:43,142 INFO: Standing2HMagicAttack01036-GoalkeeperScoop058, geo_err: 0.0609
+2025-07-14 03:13:44,819 INFO: Standing2HMagicAttack01036-GoalkeeperScoop061, geo_err: 0.0610
+2025-07-14 03:13:45,629 INFO: Standing2HMagicAttack01036-GoalkeeperScoop065, geo_err: 0.0627
+2025-07-14 03:13:47,321 INFO: Standing2HMagicAttack01036-GoalkeeperScoop069, geo_err: 0.0628
+2025-07-14 03:13:48,094 INFO: Standing2HMagicAttack01036-GoalkeeperScoop078, geo_err: 0.0618
+2025-07-14 03:13:49,769 INFO: Standing2HMagicAttack01036-DancingRunningMan259, geo_err: 0.0283
+2025-07-14 03:13:50,594 INFO: Standing2HMagicAttack01036-DancingRunningMan265, geo_err: 0.0291
+2025-07-14 03:13:52,271 INFO: Standing2HMagicAttack01036-DancingRunningMan272, geo_err: 0.0311
+2025-07-14 03:13:53,031 INFO: Standing2HMagicAttack01036-DancingRunningMan279, geo_err: 0.0280
+2025-07-14 03:13:54,804 INFO: Standing2HMagicAttack01036-DancingRunningMan285, geo_err: 0.0277
+2025-07-14 03:13:55,617 INFO: Standing2HMagicAttack01036-DancingRunningMan292, geo_err: 0.0287
+2025-07-14 03:13:57,386 INFO: Standing2HMagicAttack01036-DancingRunningMan298, geo_err: 0.0284
+2025-07-14 03:13:58,200 INFO: Standing2HMagicAttack01036-DancingRunningMan305, geo_err: 0.0283
+2025-07-14 03:13:59,834 INFO: Standing2HMagicAttack01036-DancingRunningMan312, geo_err: 0.0284
+2025-07-14 03:14:00,652 INFO: Standing2HMagicAttack01036-DancingRunningMan325, geo_err: 0.0282
+2025-07-14 03:14:02,279 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp183, geo_err: 0.0410
+2025-07-14 03:14:03,094 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp189, geo_err: 0.0406
+2025-07-14 03:14:04,733 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp194, geo_err: 0.0412
+2025-07-14 03:14:05,548 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp200, geo_err: 0.0417
+2025-07-14 03:14:07,298 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp205, geo_err: 0.0427
+2025-07-14 03:14:08,113 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp211, geo_err: 0.0413
+2025-07-14 03:14:09,747 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp216, geo_err: 0.0411
+2025-07-14 03:14:10,549 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp222, geo_err: 0.0413
+2025-07-14 03:14:12,210 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp244, geo_err: 0.0414
+2025-07-14 03:14:13,021 INFO: Standing2HMagicAttack01043-InvertedDoubleKickToKipUp255, geo_err: 0.0413
+2025-07-14 03:14:14,634 INFO: Standing2HMagicAttack01043-Running043, geo_err: 0.0321
+2025-07-14 03:14:15,449 INFO: Standing2HMagicAttack01043-Running044, geo_err: 0.0317
+2025-07-14 03:14:17,141 INFO: Standing2HMagicAttack01043-Running045, geo_err: 0.0312
+2025-07-14 03:14:17,891 INFO: Standing2HMagicAttack01043-Running046, geo_err: 0.0314
+2025-07-14 03:14:19,600 INFO: Standing2HMagicAttack01043-Running047, geo_err: 0.0317
+2025-07-14 03:14:20,450 INFO: Standing2HMagicAttack01043-Running048, geo_err: 0.0326
+2025-07-14 03:14:22,046 INFO: Standing2HMagicAttack01043-Running049, geo_err: 0.0329
+2025-07-14 03:14:22,867 INFO: Standing2HMagicAttack01043-StandingCoverTurn007, geo_err: 0.0318
+2025-07-14 03:14:24,576 INFO: Standing2HMagicAttack01043-StandingCoverTurn015, geo_err: 0.0318
+2025-07-14 03:14:25,374 INFO: Standing2HMagicAttack01043-StandingCoverTurn030, geo_err: 0.0329
+2025-07-14 03:14:27,007 INFO: Standing2HMagicAttack01043-BrooklynUprock134, geo_err: 0.0418
+2025-07-14 03:14:27,813 INFO: Standing2HMagicAttack01043-BrooklynUprock140, geo_err: 0.0461
+2025-07-14 03:14:29,418 INFO: Standing2HMagicAttack01043-BrooklynUprock146, geo_err: 0.0430
+2025-07-14 03:14:30,215 INFO: Standing2HMagicAttack01043-Floating007, geo_err: 0.0429
+2025-07-14 03:14:31,953 INFO: Standing2HMagicAttack01043-Floating029, geo_err: 0.0423
+2025-07-14 03:14:32,766 INFO: Standing2HMagicAttack01043-Floating099, geo_err: 0.0429
+2025-07-14 03:14:34,412 INFO: Standing2HMagicAttack01043-KettlebellSwing020, geo_err: 0.0426
+2025-07-14 03:14:35,217 INFO: Standing2HMagicAttack01043-KettlebellSwing047, geo_err: 0.0448
+2025-07-14 03:14:36,923 INFO: Standing2HMagicAttack01043-KettlebellSwing057, geo_err: 0.0460
+2025-07-14 03:14:37,783 INFO: Standing2HMagicAttack01043-ShortLeftSideStep006, geo_err: 0.0424
+2025-07-14 03:14:39,342 INFO: Standing2HMagicAttack01043-Falling202, geo_err: 0.0735
+2025-07-14 03:14:40,152 INFO: Standing2HMagicAttack01043-Falling216, geo_err: 0.0727
+2025-07-14 03:14:41,692 INFO: Standing2HMagicAttack01043-Falling230, geo_err: 0.0713
+2025-07-14 03:14:42,500 INFO: Standing2HMagicAttack01043-Falling237, geo_err: 0.0721
+2025-07-14 03:14:44,267 INFO: Standing2HMagicAttack01043-Falling257, geo_err: 0.0744
+2025-07-14 03:14:45,074 INFO: Standing2HMagicAttack01043-Falling271, geo_err: 0.0743
+2025-07-14 03:14:46,671 INFO: Standing2HMagicAttack01043-Falling313, geo_err: 0.0748
+2025-07-14 03:14:47,485 INFO: Standing2HMagicAttack01043-Strafing000, geo_err: 0.0773
+2025-07-14 03:14:49,077 INFO: Standing2HMagicAttack01043-Strafing009, geo_err: 0.0774
+2025-07-14 03:14:49,895 INFO: Standing2HMagicAttack01043-Strafing024, geo_err: 0.0753
+2025-07-14 03:14:51,534 INFO: Standing2HMagicAttack01043-GoalkeeperScoop044, geo_err: 0.0639
+2025-07-14 03:14:52,296 INFO: Standing2HMagicAttack01043-GoalkeeperScoop046, geo_err: 0.0640
+2025-07-14 03:14:53,970 INFO: Standing2HMagicAttack01043-GoalkeeperScoop049, geo_err: 0.0626
+2025-07-14 03:14:54,725 INFO: Standing2HMagicAttack01043-GoalkeeperScoop052, geo_err: 0.0637
+2025-07-14 03:14:56,407 INFO: Standing2HMagicAttack01043-GoalkeeperScoop055, geo_err: 0.0644
+2025-07-14 03:14:57,215 INFO: Standing2HMagicAttack01043-GoalkeeperScoop058, geo_err: 0.0628
+2025-07-14 03:14:58,827 INFO: Standing2HMagicAttack01043-GoalkeeperScoop061, geo_err: 0.0637
+2025-07-14 03:14:59,658 INFO: Standing2HMagicAttack01043-GoalkeeperScoop065, geo_err: 0.0644
+2025-07-14 03:15:01,326 INFO: Standing2HMagicAttack01043-GoalkeeperScoop069, geo_err: 0.0637
+2025-07-14 03:15:02,066 INFO: Standing2HMagicAttack01043-GoalkeeperScoop078, geo_err: 0.0644
+2025-07-14 03:15:03,765 INFO: Standing2HMagicAttack01043-DancingRunningMan259, geo_err: 0.0292
+2025-07-14 03:15:04,589 INFO: Standing2HMagicAttack01043-DancingRunningMan265, geo_err: 0.0303
+2025-07-14 03:15:06,311 INFO: Standing2HMagicAttack01043-DancingRunningMan272, geo_err: 0.0329
+2025-07-14 03:15:07,087 INFO: Standing2HMagicAttack01043-DancingRunningMan279, geo_err: 0.0296
+2025-07-14 03:15:08,814 INFO: Standing2HMagicAttack01043-DancingRunningMan285, geo_err: 0.0294
+2025-07-14 03:15:09,618 INFO: Standing2HMagicAttack01043-DancingRunningMan292, geo_err: 0.0305
+2025-07-14 03:15:11,378 INFO: Standing2HMagicAttack01043-DancingRunningMan298, geo_err: 0.0305
+2025-07-14 03:15:12,191 INFO: Standing2HMagicAttack01043-DancingRunningMan305, geo_err: 0.0302
+2025-07-14 03:15:13,856 INFO: Standing2HMagicAttack01043-DancingRunningMan312, geo_err: 0.0303
+2025-07-14 03:15:14,668 INFO: Standing2HMagicAttack01043-DancingRunningMan325, geo_err: 0.0301
+2025-07-14 03:15:16,289 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp183, geo_err: 0.0374
+2025-07-14 03:15:17,103 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp189, geo_err: 0.0387
+2025-07-14 03:15:18,776 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp194, geo_err: 0.0372
+2025-07-14 03:15:19,578 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp200, geo_err: 0.0375
+2025-07-14 03:15:21,284 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp205, geo_err: 0.0375
+2025-07-14 03:15:22,053 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp211, geo_err: 0.0376
+2025-07-14 03:15:23,734 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp216, geo_err: 0.0374
+2025-07-14 03:15:24,541 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp222, geo_err: 0.0376
+2025-07-14 03:15:26,144 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp244, geo_err: 0.0376
+2025-07-14 03:15:26,956 INFO: Standing2HMagicAttack01058-InvertedDoubleKickToKipUp255, geo_err: 0.0379
+2025-07-14 03:15:28,552 INFO: Standing2HMagicAttack01058-Running043, geo_err: 0.0267
+2025-07-14 03:15:29,337 INFO: Standing2HMagicAttack01058-Running044, geo_err: 0.0260
+2025-07-14 03:15:31,039 INFO: Standing2HMagicAttack01058-Running045, geo_err: 0.0255
+2025-07-14 03:15:31,852 INFO: Standing2HMagicAttack01058-Running046, geo_err: 0.0256
+2025-07-14 03:15:33,533 INFO: Standing2HMagicAttack01058-Running047, geo_err: 0.0259
+2025-07-14 03:15:34,328 INFO: Standing2HMagicAttack01058-Running048, geo_err: 0.0267
+2025-07-14 03:15:35,980 INFO: Standing2HMagicAttack01058-Running049, geo_err: 0.0271
+2025-07-14 03:15:36,795 INFO: Standing2HMagicAttack01058-StandingCoverTurn007, geo_err: 0.0263
+2025-07-14 03:15:38,551 INFO: Standing2HMagicAttack01058-StandingCoverTurn015, geo_err: 0.0265
+2025-07-14 03:15:39,359 INFO: Standing2HMagicAttack01058-StandingCoverTurn030, geo_err: 0.0267
+2025-07-14 03:15:40,965 INFO: Standing2HMagicAttack01058-BrooklynUprock134, geo_err: 0.0368
+2025-07-14 03:15:41,784 INFO: Standing2HMagicAttack01058-BrooklynUprock140, geo_err: 0.0391
+2025-07-14 03:15:43,384 INFO: Standing2HMagicAttack01058-BrooklynUprock146, geo_err: 0.0372
+2025-07-14 03:15:44,199 INFO: Standing2HMagicAttack01058-Floating007, geo_err: 0.0368
+2025-07-14 03:15:45,928 INFO: Standing2HMagicAttack01058-Floating029, geo_err: 0.0368
+2025-07-14 03:15:46,709 INFO: Standing2HMagicAttack01058-Floating099, geo_err: 0.0362
+2025-07-14 03:15:48,356 INFO: Standing2HMagicAttack01058-KettlebellSwing020, geo_err: 0.0372
+2025-07-14 03:15:49,163 INFO: Standing2HMagicAttack01058-KettlebellSwing047, geo_err: 0.0391
+2025-07-14 03:15:50,854 INFO: Standing2HMagicAttack01058-KettlebellSwing057, geo_err: 0.0399
+2025-07-14 03:15:51,663 INFO: Standing2HMagicAttack01058-ShortLeftSideStep006, geo_err: 0.0360
+2025-07-14 03:15:53,282 INFO: Standing2HMagicAttack01058-Falling202, geo_err: 0.0672
+2025-07-14 03:15:54,094 INFO: Standing2HMagicAttack01058-Falling216, geo_err: 0.0668
+2025-07-14 03:15:55,716 INFO: Standing2HMagicAttack01058-Falling230, geo_err: 0.0649
+2025-07-14 03:15:56,531 INFO: Standing2HMagicAttack01058-Falling237, geo_err: 0.0648
+2025-07-14 03:15:58,241 INFO: Standing2HMagicAttack01058-Falling257, geo_err: 0.0664
+2025-07-14 03:15:59,007 INFO: Standing2HMagicAttack01058-Falling271, geo_err: 0.0668
+2025-07-14 03:16:00,696 INFO: Standing2HMagicAttack01058-Falling313, geo_err: 0.0665
+2025-07-14 03:16:01,551 INFO: Standing2HMagicAttack01058-Strafing000, geo_err: 0.0701
+2025-07-14 03:16:03,093 INFO: Standing2HMagicAttack01058-Strafing009, geo_err: 0.0685
+2025-07-14 03:16:03,929 INFO: Standing2HMagicAttack01058-Strafing024, geo_err: 0.0671
+2025-07-14 03:16:05,593 INFO: Standing2HMagicAttack01058-GoalkeeperScoop044, geo_err: 0.0600
+2025-07-14 03:16:06,380 INFO: Standing2HMagicAttack01058-GoalkeeperScoop046, geo_err: 0.0592
+2025-07-14 03:16:08,030 INFO: Standing2HMagicAttack01058-GoalkeeperScoop049, geo_err: 0.0594
+2025-07-14 03:16:08,789 INFO: Standing2HMagicAttack01058-GoalkeeperScoop052, geo_err: 0.0602
+2025-07-14 03:16:10,500 INFO: Standing2HMagicAttack01058-GoalkeeperScoop055, geo_err: 0.0595
+2025-07-14 03:16:11,304 INFO: Standing2HMagicAttack01058-GoalkeeperScoop058, geo_err: 0.0602
+2025-07-14 03:16:12,923 INFO: Standing2HMagicAttack01058-GoalkeeperScoop061, geo_err: 0.0620
+2025-07-14 03:16:13,731 INFO: Standing2HMagicAttack01058-GoalkeeperScoop065, geo_err: 0.0616
+2025-07-14 03:16:15,363 INFO: Standing2HMagicAttack01058-GoalkeeperScoop069, geo_err: 0.0613
+2025-07-14 03:16:16,154 INFO: Standing2HMagicAttack01058-GoalkeeperScoop078, geo_err: 0.0596
+2025-07-14 03:16:17,801 INFO: Standing2HMagicAttack01058-DancingRunningMan259, geo_err: 0.0277
+2025-07-14 03:16:18,613 INFO: Standing2HMagicAttack01058-DancingRunningMan265, geo_err: 0.0291
+2025-07-14 03:16:20,298 INFO: Standing2HMagicAttack01058-DancingRunningMan272, geo_err: 0.0305
+2025-07-14 03:16:21,111 INFO: Standing2HMagicAttack01058-DancingRunningMan279, geo_err: 0.0275
+2025-07-14 03:16:22,875 INFO: Standing2HMagicAttack01058-DancingRunningMan285, geo_err: 0.0274
+2025-07-14 03:16:23,650 INFO: Standing2HMagicAttack01058-DancingRunningMan292, geo_err: 0.0285
+2025-07-14 03:16:25,378 INFO: Standing2HMagicAttack01058-DancingRunningMan298, geo_err: 0.0284
+2025-07-14 03:16:26,189 INFO: Standing2HMagicAttack01058-DancingRunningMan305, geo_err: 0.0273
+2025-07-14 03:16:27,861 INFO: Standing2HMagicAttack01058-DancingRunningMan312, geo_err: 0.0277
+2025-07-14 03:16:28,666 INFO: Standing2HMagicAttack01058-DancingRunningMan325, geo_err: 0.0265
+2025-07-14 03:16:30,301 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp183, geo_err: 0.0369
+2025-07-14 03:16:31,113 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp189, geo_err: 0.0380
+2025-07-14 03:16:32,866 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp194, geo_err: 0.0367
+2025-07-14 03:16:33,633 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp200, geo_err: 0.0368
+2025-07-14 03:16:35,416 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp205, geo_err: 0.0370
+2025-07-14 03:16:36,189 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp211, geo_err: 0.0370
+2025-07-14 03:16:37,889 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp216, geo_err: 0.0369
+2025-07-14 03:16:38,662 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp222, geo_err: 0.0369
+2025-07-14 03:16:40,382 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp244, geo_err: 0.0372
+2025-07-14 03:16:41,130 INFO: Standing2HMagicAttack01081-InvertedDoubleKickToKipUp255, geo_err: 0.0373
+2025-07-14 03:16:42,835 INFO: Standing2HMagicAttack01081-Running043, geo_err: 0.0262
+2025-07-14 03:16:43,635 INFO: Standing2HMagicAttack01081-Running044, geo_err: 0.0257
+2025-07-14 03:16:45,344 INFO: Standing2HMagicAttack01081-Running045, geo_err: 0.0255
+2025-07-14 03:16:46,151 INFO: Standing2HMagicAttack01081-Running046, geo_err: 0.0255
+2025-07-14 03:16:47,860 INFO: Standing2HMagicAttack01081-Running047, geo_err: 0.0256
+2025-07-14 03:16:48,671 INFO: Standing2HMagicAttack01081-Running048, geo_err: 0.0268
+2025-07-14 03:16:50,307 INFO: Standing2HMagicAttack01081-Running049, geo_err: 0.0271
+2025-07-14 03:16:51,059 INFO: Standing2HMagicAttack01081-StandingCoverTurn007, geo_err: 0.0255
+2025-07-14 03:16:52,801 INFO: Standing2HMagicAttack01081-StandingCoverTurn015, geo_err: 0.0256
+2025-07-14 03:16:53,604 INFO: Standing2HMagicAttack01081-StandingCoverTurn030, geo_err: 0.0268
+2025-07-14 03:16:55,280 INFO: Standing2HMagicAttack01081-BrooklynUprock134, geo_err: 0.0361
+2025-07-14 03:16:56,045 INFO: Standing2HMagicAttack01081-BrooklynUprock140, geo_err: 0.0389
+2025-07-14 03:16:57,696 INFO: Standing2HMagicAttack01081-BrooklynUprock146, geo_err: 0.0368
+2025-07-14 03:16:58,500 INFO: Standing2HMagicAttack01081-Floating007, geo_err: 0.0359
+2025-07-14 03:17:00,152 INFO: Standing2HMagicAttack01081-Floating029, geo_err: 0.0361
+2025-07-14 03:17:00,955 INFO: Standing2HMagicAttack01081-Floating099, geo_err: 0.0358
+2025-07-14 03:17:02,598 INFO: Standing2HMagicAttack01081-KettlebellSwing020, geo_err: 0.0367
+2025-07-14 03:17:03,417 INFO: Standing2HMagicAttack01081-KettlebellSwing047, geo_err: 0.0385
+2025-07-14 03:17:05,122 INFO: Standing2HMagicAttack01081-KettlebellSwing057, geo_err: 0.0395
+2025-07-14 03:17:05,944 INFO: Standing2HMagicAttack01081-ShortLeftSideStep006, geo_err: 0.0358
+2025-07-14 03:17:07,565 INFO: Standing2HMagicAttack01081-Falling202, geo_err: 0.0682
+2025-07-14 03:17:08,381 INFO: Standing2HMagicAttack01081-Falling216, geo_err: 0.0688
+2025-07-14 03:17:10,066 INFO: Standing2HMagicAttack01081-Falling230, geo_err: 0.0663
+2025-07-14 03:17:10,884 INFO: Standing2HMagicAttack01081-Falling237, geo_err: 0.0658
+2025-07-14 03:17:12,508 INFO: Standing2HMagicAttack01081-Falling257, geo_err: 0.0687
+2025-07-14 03:17:13,315 INFO: Standing2HMagicAttack01081-Falling271, geo_err: 0.0699
+2025-07-14 03:17:15,074 INFO: Standing2HMagicAttack01081-Falling313, geo_err: 0.0690
+2025-07-14 03:17:15,898 INFO: Standing2HMagicAttack01081-Strafing000, geo_err: 0.0708
+2025-07-14 03:17:17,590 INFO: Standing2HMagicAttack01081-Strafing009, geo_err: 0.0703
+2025-07-14 03:17:18,613 INFO: Standing2HMagicAttack01081-Strafing024, geo_err: 0.0694
+2025-07-14 03:17:20,151 INFO: Standing2HMagicAttack01081-GoalkeeperScoop044, geo_err: 0.0624
+2025-07-14 03:17:20,968 INFO: Standing2HMagicAttack01081-GoalkeeperScoop046, geo_err: 0.0605
+2025-07-14 03:17:22,699 INFO: Standing2HMagicAttack01081-GoalkeeperScoop049, geo_err: 0.0637
+2025-07-14 03:17:23,529 INFO: Standing2HMagicAttack01081-GoalkeeperScoop052, geo_err: 0.0631
+2025-07-14 03:17:25,133 INFO: Standing2HMagicAttack01081-GoalkeeperScoop055, geo_err: 0.0613
+2025-07-14 03:17:25,962 INFO: Standing2HMagicAttack01081-GoalkeeperScoop058, geo_err: 0.0627
+2025-07-14 03:17:27,581 INFO: Standing2HMagicAttack01081-GoalkeeperScoop061, geo_err: 0.0627
+2025-07-14 03:17:28,412 INFO: Standing2HMagicAttack01081-GoalkeeperScoop065, geo_err: 0.0626
+2025-07-14 03:17:30,010 INFO: Standing2HMagicAttack01081-GoalkeeperScoop069, geo_err: 0.0634
+2025-07-14 03:17:30,845 INFO: Standing2HMagicAttack01081-GoalkeeperScoop078, geo_err: 0.0620
+2025-07-14 03:17:32,567 INFO: Standing2HMagicAttack01081-DancingRunningMan259, geo_err: 0.0275
+2025-07-14 03:17:33,403 INFO: Standing2HMagicAttack01081-DancingRunningMan265, geo_err: 0.0291
+2025-07-14 03:17:35,010 INFO: Standing2HMagicAttack01081-DancingRunningMan272, geo_err: 0.0304
+2025-07-14 03:17:35,846 INFO: Standing2HMagicAttack01081-DancingRunningMan279, geo_err: 0.0275
+2025-07-14 03:17:37,558 INFO: Standing2HMagicAttack01081-DancingRunningMan285, geo_err: 0.0273
+2025-07-14 03:17:38,365 INFO: Standing2HMagicAttack01081-DancingRunningMan292, geo_err: 0.0285
+2025-07-14 03:17:40,111 INFO: Standing2HMagicAttack01081-DancingRunningMan298, geo_err: 0.0284
+2025-07-14 03:17:40,917 INFO: Standing2HMagicAttack01081-DancingRunningMan305, geo_err: 0.0267
+2025-07-14 03:17:42,544 INFO: Standing2HMagicAttack01081-DancingRunningMan312, geo_err: 0.0269
+2025-07-14 03:17:43,350 INFO: Standing2HMagicAttack01081-DancingRunningMan325, geo_err: 0.0262
+2025-07-14 03:17:45,088 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp183, geo_err: 0.0364
+2025-07-14 03:17:45,907 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp189, geo_err: 0.0383
+2025-07-14 03:17:47,565 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp194, geo_err: 0.0366
+2025-07-14 03:17:48,333 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp200, geo_err: 0.0366
+2025-07-14 03:17:50,241 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp205, geo_err: 0.0362
+2025-07-14 03:17:51,004 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp211, geo_err: 0.0368
+2025-07-14 03:17:52,672 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp216, geo_err: 0.0365
+2025-07-14 03:17:53,495 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp222, geo_err: 0.0367
+2025-07-14 03:17:55,273 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp244, geo_err: 0.0368
+2025-07-14 03:17:56,084 INFO: StandingReactLargeFromLeft001-InvertedDoubleKickToKipUp255, geo_err: 0.0371
+2025-07-14 03:17:57,756 INFO: StandingReactLargeFromLeft001-Running043, geo_err: 0.0265
+2025-07-14 03:17:58,526 INFO: StandingReactLargeFromLeft001-Running044, geo_err: 0.0261
+2025-07-14 03:18:00,273 INFO: StandingReactLargeFromLeft001-Running045, geo_err: 0.0259
+2025-07-14 03:18:01,079 INFO: StandingReactLargeFromLeft001-Running046, geo_err: 0.0255
+2025-07-14 03:18:02,815 INFO: StandingReactLargeFromLeft001-Running047, geo_err: 0.0260
+2025-07-14 03:18:03,575 INFO: StandingReactLargeFromLeft001-Running048, geo_err: 0.0271
+2025-07-14 03:18:05,251 INFO: StandingReactLargeFromLeft001-Running049, geo_err: 0.0275
+2025-07-14 03:18:06,043 INFO: StandingReactLargeFromLeft001-StandingCoverTurn007, geo_err: 0.0263
+2025-07-14 03:18:07,821 INFO: StandingReactLargeFromLeft001-StandingCoverTurn015, geo_err: 0.0262
+2025-07-14 03:18:08,604 INFO: StandingReactLargeFromLeft001-StandingCoverTurn030, geo_err: 0.0266
+2025-07-14 03:18:10,295 INFO: StandingReactLargeFromLeft001-BrooklynUprock134, geo_err: 0.0371
+2025-07-14 03:18:11,092 INFO: StandingReactLargeFromLeft001-BrooklynUprock140, geo_err: 0.0390
+2025-07-14 03:18:12,809 INFO: StandingReactLargeFromLeft001-BrooklynUprock146, geo_err: 0.0367
+2025-07-14 03:18:13,612 INFO: StandingReactLargeFromLeft001-Floating007, geo_err: 0.0363
+2025-07-14 03:18:15,356 INFO: StandingReactLargeFromLeft001-Floating029, geo_err: 0.0371
+2025-07-14 03:18:16,155 INFO: StandingReactLargeFromLeft001-Floating099, geo_err: 0.0365
+2025-07-14 03:18:17,770 INFO: StandingReactLargeFromLeft001-KettlebellSwing020, geo_err: 0.0371
+2025-07-14 03:18:18,578 INFO: StandingReactLargeFromLeft001-KettlebellSwing047, geo_err: 0.0388
+2025-07-14 03:18:20,312 INFO: StandingReactLargeFromLeft001-KettlebellSwing057, geo_err: 0.0397
+2025-07-14 03:18:21,125 INFO: StandingReactLargeFromLeft001-ShortLeftSideStep006, geo_err: 0.0365
+2025-07-14 03:18:22,761 INFO: StandingReactLargeFromLeft001-Falling202, geo_err: 0.0650
+2025-07-14 03:18:23,561 INFO: StandingReactLargeFromLeft001-Falling216, geo_err: 0.0644
+2025-07-14 03:18:25,248 INFO: StandingReactLargeFromLeft001-Falling230, geo_err: 0.0630
+2025-07-14 03:18:26,049 INFO: StandingReactLargeFromLeft001-Falling237, geo_err: 0.0622
+2025-07-14 03:18:27,750 INFO: StandingReactLargeFromLeft001-Falling257, geo_err: 0.0652
+2025-07-14 03:18:28,556 INFO: StandingReactLargeFromLeft001-Falling271, geo_err: 0.0649
+2025-07-14 03:18:30,196 INFO: StandingReactLargeFromLeft001-Falling313, geo_err: 0.0647
+2025-07-14 03:18:31,000 INFO: StandingReactLargeFromLeft001-Strafing000, geo_err: 0.0680
+2025-07-14 03:18:32,643 INFO: StandingReactLargeFromLeft001-Strafing009, geo_err: 0.0663
+2025-07-14 03:18:33,434 INFO: StandingReactLargeFromLeft001-Strafing024, geo_err: 0.0654
+2025-07-14 03:18:35,053 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop044, geo_err: 0.0607
+2025-07-14 03:18:35,847 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop046, geo_err: 0.0582
+2025-07-14 03:18:37,524 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop049, geo_err: 0.0583
+2025-07-14 03:18:38,321 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop052, geo_err: 0.0599
+2025-07-14 03:18:39,966 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop055, geo_err: 0.0588
+2025-07-14 03:18:40,769 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop058, geo_err: 0.0578
+2025-07-14 03:18:42,425 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop061, geo_err: 0.0600
+2025-07-14 03:18:43,223 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop065, geo_err: 0.0606
+2025-07-14 03:18:44,851 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop069, geo_err: 0.0606
+2025-07-14 03:18:45,620 INFO: StandingReactLargeFromLeft001-GoalkeeperScoop078, geo_err: 0.0589
+2025-07-14 03:18:47,346 INFO: StandingReactLargeFromLeft001-DancingRunningMan259, geo_err: 0.0263
+2025-07-14 03:18:48,096 INFO: StandingReactLargeFromLeft001-DancingRunningMan265, geo_err: 0.0281
+2025-07-14 03:18:49,802 INFO: StandingReactLargeFromLeft001-DancingRunningMan272, geo_err: 0.0287
+2025-07-14 03:18:50,600 INFO: StandingReactLargeFromLeft001-DancingRunningMan279, geo_err: 0.0266
+2025-07-14 03:18:52,320 INFO: StandingReactLargeFromLeft001-DancingRunningMan285, geo_err: 0.0261
+2025-07-14 03:18:53,124 INFO: StandingReactLargeFromLeft001-DancingRunningMan292, geo_err: 0.0274
+2025-07-14 03:18:54,872 INFO: StandingReactLargeFromLeft001-DancingRunningMan298, geo_err: 0.0276
+2025-07-14 03:18:55,675 INFO: StandingReactLargeFromLeft001-DancingRunningMan305, geo_err: 0.0257
+2025-07-14 03:18:57,286 INFO: StandingReactLargeFromLeft001-DancingRunningMan312, geo_err: 0.0262
+2025-07-14 03:18:58,075 INFO: StandingReactLargeFromLeft001-DancingRunningMan325, geo_err: 0.0243
+2025-07-14 03:18:59,780 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp183, geo_err: 0.0369
+2025-07-14 03:19:00,560 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp189, geo_err: 0.0374
+2025-07-14 03:19:02,375 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp194, geo_err: 0.0370
+2025-07-14 03:19:03,172 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp200, geo_err: 0.0371
+2025-07-14 03:19:04,918 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp205, geo_err: 0.0381
+2025-07-14 03:19:05,754 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp211, geo_err: 0.0371
+2025-07-14 03:19:07,461 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp216, geo_err: 0.0367
+2025-07-14 03:19:08,250 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp222, geo_err: 0.0372
+2025-07-14 03:19:10,008 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp244, geo_err: 0.0370
+2025-07-14 03:19:10,780 INFO: StandingReactLargeFromLeft005-InvertedDoubleKickToKipUp255, geo_err: 0.0376
+2025-07-14 03:19:12,495 INFO: StandingReactLargeFromLeft005-Running043, geo_err: 0.0283
+2025-07-14 03:19:13,309 INFO: StandingReactLargeFromLeft005-Running044, geo_err: 0.0278
+2025-07-14 03:19:15,191 INFO: StandingReactLargeFromLeft005-Running045, geo_err: 0.0277
+2025-07-14 03:19:15,960 INFO: StandingReactLargeFromLeft005-Running046, geo_err: 0.0281
+2025-07-14 03:19:17,873 INFO: StandingReactLargeFromLeft005-Running047, geo_err: 0.0280
+2025-07-14 03:19:18,681 INFO: StandingReactLargeFromLeft005-Running048, geo_err: 0.0284
+2025-07-14 03:19:20,431 INFO: StandingReactLargeFromLeft005-Running049, geo_err: 0.0287
+2025-07-14 03:19:21,249 INFO: StandingReactLargeFromLeft005-StandingCoverTurn007, geo_err: 0.0272
+2025-07-14 03:19:23,114 INFO: StandingReactLargeFromLeft005-StandingCoverTurn015, geo_err: 0.0269
+2025-07-14 03:19:23,908 INFO: StandingReactLargeFromLeft005-StandingCoverTurn030, geo_err: 0.0285
+2025-07-14 03:19:25,641 INFO: StandingReactLargeFromLeft005-BrooklynUprock134, geo_err: 0.0350
+2025-07-14 03:19:26,429 INFO: StandingReactLargeFromLeft005-BrooklynUprock140, geo_err: 0.0378
+2025-07-14 03:19:28,222 INFO: StandingReactLargeFromLeft005-BrooklynUprock146, geo_err: 0.0349
+2025-07-14 03:19:29,027 INFO: StandingReactLargeFromLeft005-Floating007, geo_err: 0.0360
+2025-07-14 03:19:30,759 INFO: StandingReactLargeFromLeft005-Floating029, geo_err: 0.0358
+2025-07-14 03:19:31,516 INFO: StandingReactLargeFromLeft005-Floating099, geo_err: 0.0354
+2025-07-14 03:19:33,286 INFO: StandingReactLargeFromLeft005-KettlebellSwing020, geo_err: 0.0350
+2025-07-14 03:19:34,082 INFO: StandingReactLargeFromLeft005-KettlebellSwing047, geo_err: 0.0364
+2025-07-14 03:19:35,856 INFO: StandingReactLargeFromLeft005-KettlebellSwing057, geo_err: 0.0371
+2025-07-14 03:19:36,622 INFO: StandingReactLargeFromLeft005-ShortLeftSideStep006, geo_err: 0.0349
+2025-07-14 03:19:38,369 INFO: StandingReactLargeFromLeft005-Falling202, geo_err: 0.0666
+2025-07-14 03:19:39,178 INFO: StandingReactLargeFromLeft005-Falling216, geo_err: 0.0674
+2025-07-14 03:19:40,946 INFO: StandingReactLargeFromLeft005-Falling230, geo_err: 0.0651
+2025-07-14 03:19:41,755 INFO: StandingReactLargeFromLeft005-Falling237, geo_err: 0.0638
+2025-07-14 03:19:43,549 INFO: StandingReactLargeFromLeft005-Falling257, geo_err: 0.0648
+2025-07-14 03:19:44,355 INFO: StandingReactLargeFromLeft005-Falling271, geo_err: 0.0669
+2025-07-14 03:19:46,132 INFO: StandingReactLargeFromLeft005-Falling313, geo_err: 0.0662
+2025-07-14 03:19:46,933 INFO: StandingReactLargeFromLeft005-Strafing000, geo_err: 0.0687
+2025-07-14 03:19:48,692 INFO: StandingReactLargeFromLeft005-Strafing009, geo_err: 0.0679
+2025-07-14 03:19:49,493 INFO: StandingReactLargeFromLeft005-Strafing024, geo_err: 0.0663
+2025-07-14 03:19:51,174 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop044, geo_err: 0.0636
+2025-07-14 03:19:51,978 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop046, geo_err: 0.0593
+2025-07-14 03:19:53,642 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop049, geo_err: 0.0602
+2025-07-14 03:19:54,475 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop052, geo_err: 0.0615
+2025-07-14 03:19:56,202 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop055, geo_err: 0.0610
+2025-07-14 03:19:56,990 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop058, geo_err: 0.0612
+2025-07-14 03:19:58,812 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop061, geo_err: 0.0629
+2025-07-14 03:19:59,617 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop065, geo_err: 0.0625
+2025-07-14 03:20:01,358 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop069, geo_err: 0.0625
+2025-07-14 03:20:02,188 INFO: StandingReactLargeFromLeft005-GoalkeeperScoop078, geo_err: 0.0615
+2025-07-14 03:20:03,847 INFO: StandingReactLargeFromLeft005-DancingRunningMan259, geo_err: 0.0273
+2025-07-14 03:20:04,625 INFO: StandingReactLargeFromLeft005-DancingRunningMan265, geo_err: 0.0276
+2025-07-14 03:20:06,385 INFO: StandingReactLargeFromLeft005-DancingRunningMan272, geo_err: 0.0292
+2025-07-14 03:20:07,176 INFO: StandingReactLargeFromLeft005-DancingRunningMan279, geo_err: 0.0266
+2025-07-14 03:20:08,982 INFO: StandingReactLargeFromLeft005-DancingRunningMan285, geo_err: 0.0265
+2025-07-14 03:20:09,790 INFO: StandingReactLargeFromLeft005-DancingRunningMan292, geo_err: 0.0264
+2025-07-14 03:20:11,596 INFO: StandingReactLargeFromLeft005-DancingRunningMan298, geo_err: 0.0260
+2025-07-14 03:20:12,398 INFO: StandingReactLargeFromLeft005-DancingRunningMan305, geo_err: 0.0265
+2025-07-14 03:20:14,130 INFO: StandingReactLargeFromLeft005-DancingRunningMan312, geo_err: 0.0275
+2025-07-14 03:20:14,908 INFO: StandingReactLargeFromLeft005-DancingRunningMan325, geo_err: 0.0262
+2025-07-14 03:20:16,598 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp183, geo_err: 0.0377
+2025-07-14 03:20:17,401 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp189, geo_err: 0.0385
+2025-07-14 03:20:19,089 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp194, geo_err: 0.0377
+2025-07-14 03:20:19,900 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp200, geo_err: 0.0378
+2025-07-14 03:20:21,615 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp205, geo_err: 0.0380
+2025-07-14 03:20:22,424 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp211, geo_err: 0.0379
+2025-07-14 03:20:24,048 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp216, geo_err: 0.0374
+2025-07-14 03:20:24,845 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp222, geo_err: 0.0380
+2025-07-14 03:20:26,481 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp244, geo_err: 0.0377
+2025-07-14 03:20:27,286 INFO: StandingReactLargeFromLeft010-InvertedDoubleKickToKipUp255, geo_err: 0.0379
+2025-07-14 03:20:28,962 INFO: StandingReactLargeFromLeft010-Running043, geo_err: 0.0280
+2025-07-14 03:20:29,737 INFO: StandingReactLargeFromLeft010-Running044, geo_err: 0.0275
+2025-07-14 03:20:31,438 INFO: StandingReactLargeFromLeft010-Running045, geo_err: 0.0275
+2025-07-14 03:20:32,246 INFO: StandingReactLargeFromLeft010-Running046, geo_err: 0.0279
+2025-07-14 03:20:33,911 INFO: StandingReactLargeFromLeft010-Running047, geo_err: 0.0278
+2025-07-14 03:20:34,723 INFO: StandingReactLargeFromLeft010-Running048, geo_err: 0.0283
+2025-07-14 03:20:36,384 INFO: StandingReactLargeFromLeft010-Running049, geo_err: 0.0282
+2025-07-14 03:20:37,172 INFO: StandingReactLargeFromLeft010-StandingCoverTurn007, geo_err: 0.0264
+2025-07-14 03:20:38,904 INFO: StandingReactLargeFromLeft010-StandingCoverTurn015, geo_err: 0.0264
+2025-07-14 03:20:39,662 INFO: StandingReactLargeFromLeft010-StandingCoverTurn030, geo_err: 0.0279
+2025-07-14 03:20:41,363 INFO: StandingReactLargeFromLeft010-BrooklynUprock134, geo_err: 0.0350
+2025-07-14 03:20:42,137 INFO: StandingReactLargeFromLeft010-BrooklynUprock140, geo_err: 0.0373
+2025-07-14 03:20:43,789 INFO: StandingReactLargeFromLeft010-BrooklynUprock146, geo_err: 0.0354
+2025-07-14 03:20:44,593 INFO: StandingReactLargeFromLeft010-Floating007, geo_err: 0.0370
+2025-07-14 03:20:46,312 INFO: StandingReactLargeFromLeft010-Floating029, geo_err: 0.0370
+2025-07-14 03:20:47,126 INFO: StandingReactLargeFromLeft010-Floating099, geo_err: 0.0365
+2025-07-14 03:20:48,603 INFO: StandingReactLargeFromLeft010-KettlebellSwing020, geo_err: 0.0351
+2025-07-14 03:20:49,414 INFO: StandingReactLargeFromLeft010-KettlebellSwing047, geo_err: 0.0369
+2025-07-14 03:20:51,274 INFO: StandingReactLargeFromLeft010-KettlebellSwing057, geo_err: 0.0373
+2025-07-14 03:20:52,081 INFO: StandingReactLargeFromLeft010-ShortLeftSideStep006, geo_err: 0.0353
+2025-07-14 03:20:53,783 INFO: StandingReactLargeFromLeft010-Falling202, geo_err: 0.0670
+2025-07-14 03:20:54,601 INFO: StandingReactLargeFromLeft010-Falling216, geo_err: 0.0672
+2025-07-14 03:20:56,162 INFO: StandingReactLargeFromLeft010-Falling230, geo_err: 0.0649
+2025-07-14 03:20:56,975 INFO: StandingReactLargeFromLeft010-Falling237, geo_err: 0.0637
+2025-07-14 03:20:58,726 INFO: StandingReactLargeFromLeft010-Falling257, geo_err: 0.0653
+2025-07-14 03:20:59,523 INFO: StandingReactLargeFromLeft010-Falling271, geo_err: 0.0657
+2025-07-14 03:21:01,147 INFO: StandingReactLargeFromLeft010-Falling313, geo_err: 0.0653
+2025-07-14 03:21:01,963 INFO: StandingReactLargeFromLeft010-Strafing000, geo_err: 0.0697
+2025-07-14 03:21:03,582 INFO: StandingReactLargeFromLeft010-Strafing009, geo_err: 0.0682
+2025-07-14 03:21:04,396 INFO: StandingReactLargeFromLeft010-Strafing024, geo_err: 0.0671
+2025-07-14 03:21:06,064 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop044, geo_err: 0.0621
+2025-07-14 03:21:06,873 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop046, geo_err: 0.0591
+2025-07-14 03:21:08,442 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop049, geo_err: 0.0614
+2025-07-14 03:21:09,229 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop052, geo_err: 0.0584
+2025-07-14 03:21:10,926 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop055, geo_err: 0.0616
+2025-07-14 03:21:11,743 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop058, geo_err: 0.0586
+2025-07-14 03:21:13,383 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop061, geo_err: 0.0629
+2025-07-14 03:21:14,178 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop065, geo_err: 0.0624
+2025-07-14 03:21:15,853 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop069, geo_err: 0.0633
+2025-07-14 03:21:16,661 INFO: StandingReactLargeFromLeft010-GoalkeeperScoop078, geo_err: 0.0606
+2025-07-14 03:21:18,296 INFO: StandingReactLargeFromLeft010-DancingRunningMan259, geo_err: 0.0275
+2025-07-14 03:21:19,109 INFO: StandingReactLargeFromLeft010-DancingRunningMan265, geo_err: 0.0279
+2025-07-14 03:21:20,796 INFO: StandingReactLargeFromLeft010-DancingRunningMan272, geo_err: 0.0298
+2025-07-14 03:21:21,571 INFO: StandingReactLargeFromLeft010-DancingRunningMan279, geo_err: 0.0269
+2025-07-14 03:21:23,231 INFO: StandingReactLargeFromLeft010-DancingRunningMan285, geo_err: 0.0271
+2025-07-14 03:21:24,004 INFO: StandingReactLargeFromLeft010-DancingRunningMan292, geo_err: 0.0278
+2025-07-14 03:21:25,755 INFO: StandingReactLargeFromLeft010-DancingRunningMan298, geo_err: 0.0274
+2025-07-14 03:21:26,516 INFO: StandingReactLargeFromLeft010-DancingRunningMan305, geo_err: 0.0271
+2025-07-14 03:21:28,187 INFO: StandingReactLargeFromLeft010-DancingRunningMan312, geo_err: 0.0283
+2025-07-14 03:21:28,991 INFO: StandingReactLargeFromLeft010-DancingRunningMan325, geo_err: 0.0266
+2025-07-14 03:21:30,595 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp183, geo_err: 0.0374
+2025-07-14 03:21:31,401 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp189, geo_err: 0.0382
+2025-07-14 03:21:33,095 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp194, geo_err: 0.0374
+2025-07-14 03:21:33,865 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp200, geo_err: 0.0373
+2025-07-14 03:21:35,570 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp205, geo_err: 0.0374
+2025-07-14 03:21:36,379 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp211, geo_err: 0.0373
+2025-07-14 03:21:38,067 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp216, geo_err: 0.0370
+2025-07-14 03:21:38,853 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp222, geo_err: 0.0377
+2025-07-14 03:21:40,496 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp244, geo_err: 0.0373
+2025-07-14 03:21:41,319 INFO: StandingReactLargeFromLeft016-InvertedDoubleKickToKipUp255, geo_err: 0.0376
+2025-07-14 03:21:42,901 INFO: StandingReactLargeFromLeft016-Running043, geo_err: 0.0273
+2025-07-14 03:21:43,708 INFO: StandingReactLargeFromLeft016-Running044, geo_err: 0.0272
+2025-07-14 03:21:45,412 INFO: StandingReactLargeFromLeft016-Running045, geo_err: 0.0272
+2025-07-14 03:21:46,172 INFO: StandingReactLargeFromLeft016-Running046, geo_err: 0.0276
+2025-07-14 03:21:47,878 INFO: StandingReactLargeFromLeft016-Running047, geo_err: 0.0275
+2025-07-14 03:21:48,673 INFO: StandingReactLargeFromLeft016-Running048, geo_err: 0.0279
+2025-07-14 03:21:50,402 INFO: StandingReactLargeFromLeft016-Running049, geo_err: 0.0278
+2025-07-14 03:21:51,208 INFO: StandingReactLargeFromLeft016-StandingCoverTurn007, geo_err: 0.0263
+2025-07-14 03:21:52,892 INFO: StandingReactLargeFromLeft016-StandingCoverTurn015, geo_err: 0.0262
+2025-07-14 03:21:53,703 INFO: StandingReactLargeFromLeft016-StandingCoverTurn030, geo_err: 0.0275
+2025-07-14 03:21:55,328 INFO: StandingReactLargeFromLeft016-BrooklynUprock134, geo_err: 0.0350
+2025-07-14 03:21:56,137 INFO: StandingReactLargeFromLeft016-BrooklynUprock140, geo_err: 0.0372
+2025-07-14 03:21:57,757 INFO: StandingReactLargeFromLeft016-BrooklynUprock146, geo_err: 0.0350
+2025-07-14 03:21:58,566 INFO: StandingReactLargeFromLeft016-Floating007, geo_err: 0.0368
+2025-07-14 03:22:00,284 INFO: StandingReactLargeFromLeft016-Floating029, geo_err: 0.0371
+2025-07-14 03:22:01,093 INFO: StandingReactLargeFromLeft016-Floating099, geo_err: 0.0366
+2025-07-14 03:22:02,717 INFO: StandingReactLargeFromLeft016-KettlebellSwing020, geo_err: 0.0353
+2025-07-14 03:22:03,518 INFO: StandingReactLargeFromLeft016-KettlebellSwing047, geo_err: 0.0372
+2025-07-14 03:22:05,234 INFO: StandingReactLargeFromLeft016-KettlebellSwing057, geo_err: 0.0377
+2025-07-14 03:22:06,054 INFO: StandingReactLargeFromLeft016-ShortLeftSideStep006, geo_err: 0.0351
+2025-07-14 03:22:07,737 INFO: StandingReactLargeFromLeft016-Falling202, geo_err: 0.0673
+2025-07-14 03:22:08,544 INFO: StandingReactLargeFromLeft016-Falling216, geo_err: 0.0656
+2025-07-14 03:22:10,156 INFO: StandingReactLargeFromLeft016-Falling230, geo_err: 0.0631
+2025-07-14 03:22:10,962 INFO: StandingReactLargeFromLeft016-Falling237, geo_err: 0.0633
+2025-07-14 03:22:12,650 INFO: StandingReactLargeFromLeft016-Falling257, geo_err: 0.0645
+2025-07-14 03:22:13,460 INFO: StandingReactLargeFromLeft016-Falling271, geo_err: 0.0663
+2025-07-14 03:22:15,091 INFO: StandingReactLargeFromLeft016-Falling313, geo_err: 0.0652
+2025-07-14 03:22:15,893 INFO: StandingReactLargeFromLeft016-Strafing000, geo_err: 0.0698
+2025-07-14 03:22:17,599 INFO: StandingReactLargeFromLeft016-Strafing009, geo_err: 0.0685
+2025-07-14 03:22:18,417 INFO: StandingReactLargeFromLeft016-Strafing024, geo_err: 0.0675
+2025-07-14 03:22:20,027 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop044, geo_err: 0.0628
+2025-07-14 03:22:20,843 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop046, geo_err: 0.0618
+2025-07-14 03:22:22,493 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop049, geo_err: 0.0644
+2025-07-14 03:22:23,356 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop052, geo_err: 0.0642
+2025-07-14 03:22:24,930 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop055, geo_err: 0.0626
+2025-07-14 03:22:25,734 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop058, geo_err: 0.0644
+2025-07-14 03:22:27,368 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop061, geo_err: 0.0644
+2025-07-14 03:22:28,178 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop065, geo_err: 0.0645
+2025-07-14 03:22:29,831 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop069, geo_err: 0.0643
+2025-07-14 03:22:30,633 INFO: StandingReactLargeFromLeft016-GoalkeeperScoop078, geo_err: 0.0636
+2025-07-14 03:22:32,335 INFO: StandingReactLargeFromLeft016-DancingRunningMan259, geo_err: 0.0282
+2025-07-14 03:22:33,113 INFO: StandingReactLargeFromLeft016-DancingRunningMan265, geo_err: 0.0281
+2025-07-14 03:22:34,790 INFO: StandingReactLargeFromLeft016-DancingRunningMan272, geo_err: 0.0302
+2025-07-14 03:22:35,578 INFO: StandingReactLargeFromLeft016-DancingRunningMan279, geo_err: 0.0275
+2025-07-14 03:22:37,362 INFO: StandingReactLargeFromLeft016-DancingRunningMan285, geo_err: 0.0275
+2025-07-14 03:22:38,162 INFO: StandingReactLargeFromLeft016-DancingRunningMan292, geo_err: 0.0283
+2025-07-14 03:22:39,902 INFO: StandingReactLargeFromLeft016-DancingRunningMan298, geo_err: 0.0280
+2025-07-14 03:22:40,719 INFO: StandingReactLargeFromLeft016-DancingRunningMan305, geo_err: 0.0274
+2025-07-14 03:22:42,382 INFO: StandingReactLargeFromLeft016-DancingRunningMan312, geo_err: 0.0288
+2025-07-14 03:22:43,198 INFO: StandingReactLargeFromLeft016-DancingRunningMan325, geo_err: 0.0269
+2025-07-14 03:22:44,865 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp183, geo_err: 0.0369
+2025-07-14 03:22:45,681 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp189, geo_err: 0.0378
+2025-07-14 03:22:47,393 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp194, geo_err: 0.0366
+2025-07-14 03:22:48,193 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp200, geo_err: 0.0363
+2025-07-14 03:22:49,993 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp205, geo_err: 0.0364
+2025-07-14 03:22:50,790 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp211, geo_err: 0.0366
+2025-07-14 03:22:52,559 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp216, geo_err: 0.0365
+2025-07-14 03:22:53,339 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp222, geo_err: 0.0370
+2025-07-14 03:22:55,005 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp244, geo_err: 0.0368
+2025-07-14 03:22:55,810 INFO: StandingReactLargeFromLeft021-InvertedDoubleKickToKipUp255, geo_err: 0.0370
+2025-07-14 03:22:57,581 INFO: StandingReactLargeFromLeft021-Running043, geo_err: 0.0269
+2025-07-14 03:22:58,401 INFO: StandingReactLargeFromLeft021-Running044, geo_err: 0.0266
+2025-07-14 03:23:00,192 INFO: StandingReactLargeFromLeft021-Running045, geo_err: 0.0265
+2025-07-14 03:23:01,010 INFO: StandingReactLargeFromLeft021-Running046, geo_err: 0.0266
+2025-07-14 03:23:02,768 INFO: StandingReactLargeFromLeft021-Running047, geo_err: 0.0269
+2025-07-14 03:23:03,599 INFO: StandingReactLargeFromLeft021-Running048, geo_err: 0.0272
+2025-07-14 03:23:05,354 INFO: StandingReactLargeFromLeft021-Running049, geo_err: 0.0275
+2025-07-14 03:23:06,166 INFO: StandingReactLargeFromLeft021-StandingCoverTurn007, geo_err: 0.0260
+2025-07-14 03:23:07,943 INFO: StandingReactLargeFromLeft021-StandingCoverTurn015, geo_err: 0.0260
+2025-07-14 03:23:08,742 INFO: StandingReactLargeFromLeft021-StandingCoverTurn030, geo_err: 0.0268
+2025-07-14 03:23:10,484 INFO: StandingReactLargeFromLeft021-BrooklynUprock134, geo_err: 0.0353
+2025-07-14 03:23:11,250 INFO: StandingReactLargeFromLeft021-BrooklynUprock140, geo_err: 0.0375
+2025-07-14 03:23:13,019 INFO: StandingReactLargeFromLeft021-BrooklynUprock146, geo_err: 0.0351
+2025-07-14 03:23:13,808 INFO: StandingReactLargeFromLeft021-Floating007, geo_err: 0.0365
+2025-07-14 03:23:15,567 INFO: StandingReactLargeFromLeft021-Floating029, geo_err: 0.0371
+2025-07-14 03:23:16,371 INFO: StandingReactLargeFromLeft021-Floating099, geo_err: 0.0364
+2025-07-14 03:23:18,104 INFO: StandingReactLargeFromLeft021-KettlebellSwing020, geo_err: 0.0351
+2025-07-14 03:23:18,906 INFO: StandingReactLargeFromLeft021-KettlebellSwing047, geo_err: 0.0366
+2025-07-14 03:23:20,697 INFO: StandingReactLargeFromLeft021-KettlebellSwing057, geo_err: 0.0370
+2025-07-14 03:23:21,514 INFO: StandingReactLargeFromLeft021-ShortLeftSideStep006, geo_err: 0.0356
+2025-07-14 03:23:23,232 INFO: StandingReactLargeFromLeft021-Falling202, geo_err: 0.0669
+2025-07-14 03:23:24,037 INFO: StandingReactLargeFromLeft021-Falling216, geo_err: 0.0660
+2025-07-14 03:23:25,781 INFO: StandingReactLargeFromLeft021-Falling230, geo_err: 0.0652
+2025-07-14 03:23:26,598 INFO: StandingReactLargeFromLeft021-Falling237, geo_err: 0.0640
+2025-07-14 03:23:28,268 INFO: StandingReactLargeFromLeft021-Falling257, geo_err: 0.0652
+2025-07-14 03:23:29,081 INFO: StandingReactLargeFromLeft021-Falling271, geo_err: 0.0668
+2025-07-14 03:23:30,722 INFO: StandingReactLargeFromLeft021-Falling313, geo_err: 0.0660
+2025-07-14 03:23:31,493 INFO: StandingReactLargeFromLeft021-Strafing000, geo_err: 0.0694
+2025-07-14 03:23:33,222 INFO: StandingReactLargeFromLeft021-Strafing009, geo_err: 0.0685
+2025-07-14 03:23:34,017 INFO: StandingReactLargeFromLeft021-Strafing024, geo_err: 0.0669
+2025-07-14 03:23:35,731 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop044, geo_err: 0.0605
+2025-07-14 03:23:36,479 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop046, geo_err: 0.0584
+2025-07-14 03:23:38,204 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop049, geo_err: 0.0596
+2025-07-14 03:23:38,997 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop052, geo_err: 0.0618
+2025-07-14 03:23:40,680 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop055, geo_err: 0.0613
+2025-07-14 03:23:41,473 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop058, geo_err: 0.0613
+2025-07-14 03:23:43,158 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop061, geo_err: 0.0613
+2025-07-14 03:23:43,960 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop065, geo_err: 0.0605
+2025-07-14 03:23:45,708 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop069, geo_err: 0.0628
+2025-07-14 03:23:46,459 INFO: StandingReactLargeFromLeft021-GoalkeeperScoop078, geo_err: 0.0603
+2025-07-14 03:23:48,264 INFO: StandingReactLargeFromLeft021-DancingRunningMan259, geo_err: 0.0271
+2025-07-14 03:23:49,128 INFO: StandingReactLargeFromLeft021-DancingRunningMan265, geo_err: 0.0275
+2025-07-14 03:23:50,766 INFO: StandingReactLargeFromLeft021-DancingRunningMan272, geo_err: 0.0284
+2025-07-14 03:23:51,559 INFO: StandingReactLargeFromLeft021-DancingRunningMan279, geo_err: 0.0265
+2025-07-14 03:23:53,404 INFO: StandingReactLargeFromLeft021-DancingRunningMan285, geo_err: 0.0265
+2025-07-14 03:23:54,216 INFO: StandingReactLargeFromLeft021-DancingRunningMan292, geo_err: 0.0268
+2025-07-14 03:23:55,993 INFO: StandingReactLargeFromLeft021-DancingRunningMan298, geo_err: 0.0266
+2025-07-14 03:23:56,811 INFO: StandingReactLargeFromLeft021-DancingRunningMan305, geo_err: 0.0264
+2025-07-14 03:23:58,472 INFO: StandingReactLargeFromLeft021-DancingRunningMan312, geo_err: 0.0276
+2025-07-14 03:23:59,287 INFO: StandingReactLargeFromLeft021-DancingRunningMan325, geo_err: 0.0256
+2025-07-14 03:24:00,948 INFO: InvertedDoubleKickToKipUp183-Standing2HMagicAttack01034, geo_err: 0.0451
+2025-07-14 03:24:01,733 INFO: InvertedDoubleKickToKipUp183-Standing2HMagicAttack01036, geo_err: 0.0471
+2025-07-14 03:24:03,437 INFO: InvertedDoubleKickToKipUp183-Standing2HMagicAttack01043, geo_err: 0.0480
+2025-07-14 03:24:04,201 INFO: InvertedDoubleKickToKipUp183-Standing2HMagicAttack01058, geo_err: 0.0452
+2025-07-14 03:24:05,908 INFO: InvertedDoubleKickToKipUp183-Standing2HMagicAttack01081, geo_err: 0.0444
+2025-07-14 03:24:06,723 INFO: InvertedDoubleKickToKipUp183-StandingReactLargeFromLeft001, geo_err: 0.0440
+2025-07-14 03:24:08,430 INFO: InvertedDoubleKickToKipUp183-StandingReactLargeFromLeft005, geo_err: 0.0451
+2025-07-14 03:24:09,243 INFO: InvertedDoubleKickToKipUp183-StandingReactLargeFromLeft010, geo_err: 0.0454
+2025-07-14 03:24:10,851 INFO: InvertedDoubleKickToKipUp183-StandingReactLargeFromLeft016, geo_err: 0.0447
+2025-07-14 03:24:11,670 INFO: InvertedDoubleKickToKipUp183-StandingReactLargeFromLeft021, geo_err: 0.0445
+2025-07-14 03:24:13,347 INFO: InvertedDoubleKickToKipUp189-Standing2HMagicAttack01034, geo_err: 0.0447
+2025-07-14 03:24:14,159 INFO: InvertedDoubleKickToKipUp189-Standing2HMagicAttack01036, geo_err: 0.0462
+2025-07-14 03:24:15,783 INFO: InvertedDoubleKickToKipUp189-Standing2HMagicAttack01043, geo_err: 0.0473
+2025-07-14 03:24:16,594 INFO: InvertedDoubleKickToKipUp189-Standing2HMagicAttack01058, geo_err: 0.0458
+2025-07-14 03:24:18,280 INFO: InvertedDoubleKickToKipUp189-Standing2HMagicAttack01081, geo_err: 0.0447
+2025-07-14 03:24:19,048 INFO: InvertedDoubleKickToKipUp189-StandingReactLargeFromLeft001, geo_err: 0.0453
+2025-07-14 03:24:20,771 INFO: InvertedDoubleKickToKipUp189-StandingReactLargeFromLeft005, geo_err: 0.0450
+2025-07-14 03:24:21,605 INFO: InvertedDoubleKickToKipUp189-StandingReactLargeFromLeft010, geo_err: 0.0454
+2025-07-14 03:24:23,338 INFO: InvertedDoubleKickToKipUp189-StandingReactLargeFromLeft016, geo_err: 0.0451
+2025-07-14 03:24:24,154 INFO: InvertedDoubleKickToKipUp189-StandingReactLargeFromLeft021, geo_err: 0.0450
+2025-07-14 03:24:25,918 INFO: InvertedDoubleKickToKipUp194-Standing2HMagicAttack01034, geo_err: 0.0452
+2025-07-14 03:24:26,727 INFO: InvertedDoubleKickToKipUp194-Standing2HMagicAttack01036, geo_err: 0.0471
+2025-07-14 03:24:28,532 INFO: InvertedDoubleKickToKipUp194-Standing2HMagicAttack01043, geo_err: 0.0481
+2025-07-14 03:24:29,342 INFO: InvertedDoubleKickToKipUp194-Standing2HMagicAttack01058, geo_err: 0.0452
+2025-07-14 03:24:31,108 INFO: InvertedDoubleKickToKipUp194-Standing2HMagicAttack01081, geo_err: 0.0445
+2025-07-14 03:24:31,920 INFO: InvertedDoubleKickToKipUp194-StandingReactLargeFromLeft001, geo_err: 0.0442
+2025-07-14 03:24:33,682 INFO: InvertedDoubleKickToKipUp194-StandingReactLargeFromLeft005, geo_err: 0.0453
+2025-07-14 03:24:34,491 INFO: InvertedDoubleKickToKipUp194-StandingReactLargeFromLeft010, geo_err: 0.0455
+2025-07-14 03:24:36,119 INFO: InvertedDoubleKickToKipUp194-StandingReactLargeFromLeft016, geo_err: 0.0452
+2025-07-14 03:24:36,930 INFO: InvertedDoubleKickToKipUp194-StandingReactLargeFromLeft021, geo_err: 0.0447
+2025-07-14 03:24:38,654 INFO: InvertedDoubleKickToKipUp200-Standing2HMagicAttack01034, geo_err: 0.0460
+2025-07-14 03:24:39,452 INFO: InvertedDoubleKickToKipUp200-Standing2HMagicAttack01036, geo_err: 0.0476
+2025-07-14 03:24:41,078 INFO: InvertedDoubleKickToKipUp200-Standing2HMagicAttack01043, geo_err: 0.0488
+2025-07-14 03:24:41,883 INFO: InvertedDoubleKickToKipUp200-Standing2HMagicAttack01058, geo_err: 0.0462
+2025-07-14 03:24:43,575 INFO: InvertedDoubleKickToKipUp200-Standing2HMagicAttack01081, geo_err: 0.0455
+2025-07-14 03:24:44,348 INFO: InvertedDoubleKickToKipUp200-StandingReactLargeFromLeft001, geo_err: 0.0449
+2025-07-14 03:24:46,133 INFO: InvertedDoubleKickToKipUp200-StandingReactLargeFromLeft005, geo_err: 0.0460
+2025-07-14 03:24:46,920 INFO: InvertedDoubleKickToKipUp200-StandingReactLargeFromLeft010, geo_err: 0.0462
+2025-07-14 03:24:48,613 INFO: InvertedDoubleKickToKipUp200-StandingReactLargeFromLeft016, geo_err: 0.0459
+2025-07-14 03:24:49,417 INFO: InvertedDoubleKickToKipUp200-StandingReactLargeFromLeft021, geo_err: 0.0453
+2025-07-14 03:24:51,073 INFO: InvertedDoubleKickToKipUp205-Standing2HMagicAttack01034, geo_err: 0.0468
+2025-07-14 03:24:51,876 INFO: InvertedDoubleKickToKipUp205-Standing2HMagicAttack01036, geo_err: 0.0489
+2025-07-14 03:24:53,625 INFO: InvertedDoubleKickToKipUp205-Standing2HMagicAttack01043, geo_err: 0.0503
+2025-07-14 03:24:54,434 INFO: InvertedDoubleKickToKipUp205-Standing2HMagicAttack01058, geo_err: 0.0468
+2025-07-14 03:24:56,156 INFO: InvertedDoubleKickToKipUp205-Standing2HMagicAttack01081, geo_err: 0.0459
+2025-07-14 03:24:56,951 INFO: InvertedDoubleKickToKipUp205-StandingReactLargeFromLeft001, geo_err: 0.0454
+2025-07-14 03:24:58,700 INFO: InvertedDoubleKickToKipUp205-StandingReactLargeFromLeft005, geo_err: 0.0471
+2025-07-14 03:24:59,461 INFO: InvertedDoubleKickToKipUp205-StandingReactLargeFromLeft010, geo_err: 0.0471
+2025-07-14 03:25:01,157 INFO: InvertedDoubleKickToKipUp205-StandingReactLargeFromLeft016, geo_err: 0.0466
+2025-07-14 03:25:01,967 INFO: InvertedDoubleKickToKipUp205-StandingReactLargeFromLeft021, geo_err: 0.0456
+2025-07-14 03:25:03,635 INFO: InvertedDoubleKickToKipUp211-Standing2HMagicAttack01034, geo_err: 0.0452
+2025-07-14 03:25:04,431 INFO: InvertedDoubleKickToKipUp211-Standing2HMagicAttack01036, geo_err: 0.0475
+2025-07-14 03:25:06,115 INFO: InvertedDoubleKickToKipUp211-Standing2HMagicAttack01043, geo_err: 0.0484
+2025-07-14 03:25:06,913 INFO: InvertedDoubleKickToKipUp211-Standing2HMagicAttack01058, geo_err: 0.0459
+2025-07-14 03:25:08,597 INFO: InvertedDoubleKickToKipUp211-Standing2HMagicAttack01081, geo_err: 0.0450
+2025-07-14 03:25:09,399 INFO: InvertedDoubleKickToKipUp211-StandingReactLargeFromLeft001, geo_err: 0.0446
+2025-07-14 03:25:11,079 INFO: InvertedDoubleKickToKipUp211-StandingReactLargeFromLeft005, geo_err: 0.0454
+2025-07-14 03:25:11,887 INFO: InvertedDoubleKickToKipUp211-StandingReactLargeFromLeft010, geo_err: 0.0455
+2025-07-14 03:25:13,585 INFO: InvertedDoubleKickToKipUp211-StandingReactLargeFromLeft016, geo_err: 0.0451
+2025-07-14 03:25:14,374 INFO: InvertedDoubleKickToKipUp211-StandingReactLargeFromLeft021, geo_err: 0.0449
+2025-07-14 03:25:16,073 INFO: InvertedDoubleKickToKipUp216-Standing2HMagicAttack01034, geo_err: 0.0450
+2025-07-14 03:25:16,845 INFO: InvertedDoubleKickToKipUp216-Standing2HMagicAttack01036, geo_err: 0.0473
+2025-07-14 03:25:18,566 INFO: InvertedDoubleKickToKipUp216-Standing2HMagicAttack01043, geo_err: 0.0481
+2025-07-14 03:25:19,373 INFO: InvertedDoubleKickToKipUp216-Standing2HMagicAttack01058, geo_err: 0.0456
+2025-07-14 03:25:21,112 INFO: InvertedDoubleKickToKipUp216-Standing2HMagicAttack01081, geo_err: 0.0448
+2025-07-14 03:25:21,932 INFO: InvertedDoubleKickToKipUp216-StandingReactLargeFromLeft001, geo_err: 0.0442
+2025-07-14 03:25:23,566 INFO: InvertedDoubleKickToKipUp216-StandingReactLargeFromLeft005, geo_err: 0.0453
+2025-07-14 03:25:24,391 INFO: InvertedDoubleKickToKipUp216-StandingReactLargeFromLeft010, geo_err: 0.0454
+2025-07-14 03:25:26,021 INFO: InvertedDoubleKickToKipUp216-StandingReactLargeFromLeft016, geo_err: 0.0452
+2025-07-14 03:25:26,774 INFO: InvertedDoubleKickToKipUp216-StandingReactLargeFromLeft021, geo_err: 0.0447
+2025-07-14 03:25:28,496 INFO: InvertedDoubleKickToKipUp222-Standing2HMagicAttack01034, geo_err: 0.0453
+2025-07-14 03:25:29,280 INFO: InvertedDoubleKickToKipUp222-Standing2HMagicAttack01036, geo_err: 0.0472
+2025-07-14 03:25:31,039 INFO: InvertedDoubleKickToKipUp222-Standing2HMagicAttack01043, geo_err: 0.0482
+2025-07-14 03:25:31,833 INFO: InvertedDoubleKickToKipUp222-Standing2HMagicAttack01058, geo_err: 0.0456
+2025-07-14 03:25:33,517 INFO: InvertedDoubleKickToKipUp222-Standing2HMagicAttack01081, geo_err: 0.0446
+2025-07-14 03:25:34,296 INFO: InvertedDoubleKickToKipUp222-StandingReactLargeFromLeft001, geo_err: 0.0445
+2025-07-14 03:25:36,005 INFO: InvertedDoubleKickToKipUp222-StandingReactLargeFromLeft005, geo_err: 0.0455
+2025-07-14 03:25:36,812 INFO: InvertedDoubleKickToKipUp222-StandingReactLargeFromLeft010, geo_err: 0.0456
+2025-07-14 03:25:38,407 INFO: InvertedDoubleKickToKipUp222-StandingReactLargeFromLeft016, geo_err: 0.0453
+2025-07-14 03:25:39,219 INFO: InvertedDoubleKickToKipUp222-StandingReactLargeFromLeft021, geo_err: 0.0451
+2025-07-14 03:25:40,830 INFO: InvertedDoubleKickToKipUp244-Standing2HMagicAttack01034, geo_err: 0.0454
+2025-07-14 03:25:41,613 INFO: InvertedDoubleKickToKipUp244-Standing2HMagicAttack01036, geo_err: 0.0471
+2025-07-14 03:25:43,290 INFO: InvertedDoubleKickToKipUp244-Standing2HMagicAttack01043, geo_err: 0.0480
+2025-07-14 03:25:44,056 INFO: InvertedDoubleKickToKipUp244-Standing2HMagicAttack01058, geo_err: 0.0455
+2025-07-14 03:25:45,734 INFO: InvertedDoubleKickToKipUp244-Standing2HMagicAttack01081, geo_err: 0.0448
+2025-07-14 03:25:46,536 INFO: InvertedDoubleKickToKipUp244-StandingReactLargeFromLeft001, geo_err: 0.0443
+2025-07-14 03:25:48,241 INFO: InvertedDoubleKickToKipUp244-StandingReactLargeFromLeft005, geo_err: 0.0451
+2025-07-14 03:25:49,047 INFO: InvertedDoubleKickToKipUp244-StandingReactLargeFromLeft010, geo_err: 0.0453
+2025-07-14 03:25:50,682 INFO: InvertedDoubleKickToKipUp244-StandingReactLargeFromLeft016, geo_err: 0.0451
+2025-07-14 03:25:51,480 INFO: InvertedDoubleKickToKipUp244-StandingReactLargeFromLeft021, geo_err: 0.0445
+2025-07-14 03:25:53,101 INFO: InvertedDoubleKickToKipUp255-Standing2HMagicAttack01034, geo_err: 0.0454
+2025-07-14 03:25:53,921 INFO: InvertedDoubleKickToKipUp255-Standing2HMagicAttack01036, geo_err: 0.0471
+2025-07-14 03:25:55,582 INFO: InvertedDoubleKickToKipUp255-Standing2HMagicAttack01043, geo_err: 0.0481
+2025-07-14 03:25:56,397 INFO: InvertedDoubleKickToKipUp255-Standing2HMagicAttack01058, geo_err: 0.0459
+2025-07-14 03:25:58,051 INFO: InvertedDoubleKickToKipUp255-Standing2HMagicAttack01081, geo_err: 0.0450
+2025-07-14 03:25:58,822 INFO: InvertedDoubleKickToKipUp255-StandingReactLargeFromLeft001, geo_err: 0.0445
+2025-07-14 03:26:00,544 INFO: InvertedDoubleKickToKipUp255-StandingReactLargeFromLeft005, geo_err: 0.0454
+2025-07-14 03:26:01,349 INFO: InvertedDoubleKickToKipUp255-StandingReactLargeFromLeft010, geo_err: 0.0457
+2025-07-14 03:26:03,004 INFO: InvertedDoubleKickToKipUp255-StandingReactLargeFromLeft016, geo_err: 0.0454
+2025-07-14 03:26:03,753 INFO: InvertedDoubleKickToKipUp255-StandingReactLargeFromLeft021, geo_err: 0.0450
+2025-07-14 03:26:05,432 INFO: Running043-Standing2HMagicAttack01034, geo_err: 0.0323
+2025-07-14 03:26:06,238 INFO: Running043-Standing2HMagicAttack01036, geo_err: 0.0360
+2025-07-14 03:26:07,810 INFO: Running043-Standing2HMagicAttack01043, geo_err: 0.0374
+2025-07-14 03:26:08,606 INFO: Running043-Standing2HMagicAttack01058, geo_err: 0.0315
+2025-07-14 03:26:10,282 INFO: Running043-Standing2HMagicAttack01081, geo_err: 0.0306
+2025-07-14 03:26:11,070 INFO: Running043-StandingReactLargeFromLeft001, geo_err: 0.0314
+2025-07-14 03:26:12,812 INFO: Running043-StandingReactLargeFromLeft005, geo_err: 0.0320
+2025-07-14 03:26:13,593 INFO: Running043-StandingReactLargeFromLeft010, geo_err: 0.0315
+2025-07-14 03:26:15,309 INFO: Running043-StandingReactLargeFromLeft016, geo_err: 0.0319
+2025-07-14 03:26:16,105 INFO: Running043-StandingReactLargeFromLeft021, geo_err: 0.0317
+2025-07-14 03:26:17,717 INFO: Running044-Standing2HMagicAttack01034, geo_err: 0.0313
+2025-07-14 03:26:18,527 INFO: Running044-Standing2HMagicAttack01036, geo_err: 0.0347
+2025-07-14 03:26:20,132 INFO: Running044-Standing2HMagicAttack01043, geo_err: 0.0364
+2025-07-14 03:26:20,946 INFO: Running044-Standing2HMagicAttack01058, geo_err: 0.0305
+2025-07-14 03:26:22,562 INFO: Running044-Standing2HMagicAttack01081, geo_err: 0.0292
+2025-07-14 03:26:23,357 INFO: Running044-StandingReactLargeFromLeft001, geo_err: 0.0300
+2025-07-14 03:26:25,046 INFO: Running044-StandingReactLargeFromLeft005, geo_err: 0.0308
+2025-07-14 03:26:25,818 INFO: Running044-StandingReactLargeFromLeft010, geo_err: 0.0307
+2025-07-14 03:26:27,505 INFO: Running044-StandingReactLargeFromLeft016, geo_err: 0.0312
+2025-07-14 03:26:28,323 INFO: Running044-StandingReactLargeFromLeft021, geo_err: 0.0310
+2025-07-14 03:26:29,908 INFO: Running045-Standing2HMagicAttack01034, geo_err: 0.0304
+2025-07-14 03:26:30,718 INFO: Running045-Standing2HMagicAttack01036, geo_err: 0.0338
+2025-07-14 03:26:32,402 INFO: Running045-Standing2HMagicAttack01043, geo_err: 0.0356
+2025-07-14 03:26:33,167 INFO: Running045-Standing2HMagicAttack01058, geo_err: 0.0295
+2025-07-14 03:26:34,935 INFO: Running045-Standing2HMagicAttack01081, geo_err: 0.0284
+2025-07-14 03:26:35,739 INFO: Running045-StandingReactLargeFromLeft001, geo_err: 0.0291
+2025-07-14 03:26:37,455 INFO: Running045-StandingReactLargeFromLeft005, geo_err: 0.0303
+2025-07-14 03:26:38,262 INFO: Running045-StandingReactLargeFromLeft010, geo_err: 0.0301
+2025-07-14 03:26:39,856 INFO: Running045-StandingReactLargeFromLeft016, geo_err: 0.0306
+2025-07-14 03:26:40,652 INFO: Running045-StandingReactLargeFromLeft021, geo_err: 0.0302
+2025-07-14 03:26:42,309 INFO: Running046-Standing2HMagicAttack01034, geo_err: 0.0301
+2025-07-14 03:26:43,118 INFO: Running046-Standing2HMagicAttack01036, geo_err: 0.0333
+2025-07-14 03:26:44,742 INFO: Running046-Standing2HMagicAttack01043, geo_err: 0.0353
+2025-07-14 03:26:45,551 INFO: Running046-Standing2HMagicAttack01058, geo_err: 0.0291
+2025-07-14 03:26:47,190 INFO: Running046-Standing2HMagicAttack01081, geo_err: 0.0282
+2025-07-14 03:26:47,999 INFO: Running046-StandingReactLargeFromLeft001, geo_err: 0.0287
+2025-07-14 03:26:49,637 INFO: Running046-StandingReactLargeFromLeft005, geo_err: 0.0303
+2025-07-14 03:26:50,456 INFO: Running046-StandingReactLargeFromLeft010, geo_err: 0.0301
+2025-07-14 03:26:52,018 INFO: Running046-StandingReactLargeFromLeft016, geo_err: 0.0308
+2025-07-14 03:26:52,815 INFO: Running046-StandingReactLargeFromLeft021, geo_err: 0.0300
+2025-07-14 03:26:54,541 INFO: Running047-Standing2HMagicAttack01034, geo_err: 0.0309
+2025-07-14 03:26:55,297 INFO: Running047-Standing2HMagicAttack01036, geo_err: 0.0343
+2025-07-14 03:26:57,019 INFO: Running047-Standing2HMagicAttack01043, geo_err: 0.0361
+2025-07-14 03:26:57,825 INFO: Running047-Standing2HMagicAttack01058, geo_err: 0.0302
+2025-07-14 03:26:59,481 INFO: Running047-Standing2HMagicAttack01081, geo_err: 0.0291
+2025-07-14 03:27:00,288 INFO: Running047-StandingReactLargeFromLeft001, geo_err: 0.0298
+2025-07-14 03:27:01,977 INFO: Running047-StandingReactLargeFromLeft005, geo_err: 0.0307
+2025-07-14 03:27:02,785 INFO: Running047-StandingReactLargeFromLeft010, geo_err: 0.0305
+2025-07-14 03:27:04,506 INFO: Running047-StandingReactLargeFromLeft016, geo_err: 0.0313
+2025-07-14 03:27:05,254 INFO: Running047-StandingReactLargeFromLeft021, geo_err: 0.0306
+2025-07-14 03:27:06,962 INFO: Running048-Standing2HMagicAttack01034, geo_err: 0.0317
+2025-07-14 03:27:07,776 INFO: Running048-Standing2HMagicAttack01036, geo_err: 0.0349
+2025-07-14 03:27:09,484 INFO: Running048-Standing2HMagicAttack01043, geo_err: 0.0366
+2025-07-14 03:27:10,259 INFO: Running048-Standing2HMagicAttack01058, geo_err: 0.0310
+2025-07-14 03:27:11,950 INFO: Running048-Standing2HMagicAttack01081, geo_err: 0.0300
+2025-07-14 03:27:12,751 INFO: Running048-StandingReactLargeFromLeft001, geo_err: 0.0309
+2025-07-14 03:27:14,521 INFO: Running048-StandingReactLargeFromLeft005, geo_err: 0.0310
+2025-07-14 03:27:15,321 INFO: Running048-StandingReactLargeFromLeft010, geo_err: 0.0307
+2025-07-14 03:27:16,993 INFO: Running048-StandingReactLargeFromLeft016, geo_err: 0.0312
+2025-07-14 03:27:17,802 INFO: Running048-StandingReactLargeFromLeft021, geo_err: 0.0310
+2025-07-14 03:27:19,404 INFO: Running049-Standing2HMagicAttack01034, geo_err: 0.0321
+2025-07-14 03:27:20,183 INFO: Running049-Standing2HMagicAttack01036, geo_err: 0.0354
+2025-07-14 03:27:21,850 INFO: Running049-Standing2HMagicAttack01043, geo_err: 0.0368
+2025-07-14 03:27:22,645 INFO: Running049-Standing2HMagicAttack01058, geo_err: 0.0314
+2025-07-14 03:27:24,291 INFO: Running049-Standing2HMagicAttack01081, geo_err: 0.0305
+2025-07-14 03:27:25,097 INFO: Running049-StandingReactLargeFromLeft001, geo_err: 0.0317
+2025-07-14 03:27:26,798 INFO: Running049-StandingReactLargeFromLeft005, geo_err: 0.0313
+2025-07-14 03:27:27,604 INFO: Running049-StandingReactLargeFromLeft010, geo_err: 0.0308
+2025-07-14 03:27:29,228 INFO: Running049-StandingReactLargeFromLeft016, geo_err: 0.0314
+2025-07-14 03:27:30,041 INFO: Running049-StandingReactLargeFromLeft021, geo_err: 0.0315
+2025-07-14 03:27:31,768 INFO: StandingCoverTurn007-Standing2HMagicAttack01034, geo_err: 0.0303
+2025-07-14 03:27:32,595 INFO: StandingCoverTurn007-Standing2HMagicAttack01036, geo_err: 0.0335
+2025-07-14 03:27:34,282 INFO: StandingCoverTurn007-Standing2HMagicAttack01043, geo_err: 0.0352
+2025-07-14 03:27:35,072 INFO: StandingCoverTurn007-Standing2HMagicAttack01058, geo_err: 0.0301
+2025-07-14 03:27:36,786 INFO: StandingCoverTurn007-Standing2HMagicAttack01081, geo_err: 0.0291
+2025-07-14 03:27:37,615 INFO: StandingCoverTurn007-StandingReactLargeFromLeft001, geo_err: 0.0300
+2025-07-14 03:27:39,348 INFO: StandingCoverTurn007-StandingReactLargeFromLeft005, geo_err: 0.0297
+2025-07-14 03:27:40,137 INFO: StandingCoverTurn007-StandingReactLargeFromLeft010, geo_err: 0.0289
+2025-07-14 03:27:41,855 INFO: StandingCoverTurn007-StandingReactLargeFromLeft016, geo_err: 0.0297
+2025-07-14 03:27:42,641 INFO: StandingCoverTurn007-StandingReactLargeFromLeft021, geo_err: 0.0298
+2025-07-14 03:27:44,355 INFO: StandingCoverTurn015-Standing2HMagicAttack01034, geo_err: 0.0307
+2025-07-14 03:27:45,169 INFO: StandingCoverTurn015-Standing2HMagicAttack01036, geo_err: 0.0338
+2025-07-14 03:27:46,819 INFO: StandingCoverTurn015-Standing2HMagicAttack01043, geo_err: 0.0355
+2025-07-14 03:27:47,648 INFO: StandingCoverTurn015-Standing2HMagicAttack01058, geo_err: 0.0299
+2025-07-14 03:27:49,274 INFO: StandingCoverTurn015-Standing2HMagicAttack01081, geo_err: 0.0288
+2025-07-14 03:27:50,086 INFO: StandingCoverTurn015-StandingReactLargeFromLeft001, geo_err: 0.0297
+2025-07-14 03:27:51,880 INFO: StandingCoverTurn015-StandingReactLargeFromLeft005, geo_err: 0.0293
+2025-07-14 03:27:52,720 INFO: StandingCoverTurn015-StandingReactLargeFromLeft010, geo_err: 0.0292
+2025-07-14 03:27:54,439 INFO: StandingCoverTurn015-StandingReactLargeFromLeft016, geo_err: 0.0295
+2025-07-14 03:27:55,232 INFO: StandingCoverTurn015-StandingReactLargeFromLeft021, geo_err: 0.0295
+2025-07-14 03:27:56,827 INFO: StandingCoverTurn030-Standing2HMagicAttack01034, geo_err: 0.0312
+2025-07-14 03:27:57,573 INFO: StandingCoverTurn030-Standing2HMagicAttack01036, geo_err: 0.0341
+2025-07-14 03:27:59,262 INFO: StandingCoverTurn030-Standing2HMagicAttack01043, geo_err: 0.0362
+2025-07-14 03:28:00,084 INFO: StandingCoverTurn030-Standing2HMagicAttack01058, geo_err: 0.0303
+2025-07-14 03:28:01,634 INFO: StandingCoverTurn030-Standing2HMagicAttack01081, geo_err: 0.0292
+2025-07-14 03:28:02,463 INFO: StandingCoverTurn030-StandingReactLargeFromLeft001, geo_err: 0.0298
+2025-07-14 03:28:04,182 INFO: StandingCoverTurn030-StandingReactLargeFromLeft005, geo_err: 0.0302
+2025-07-14 03:28:04,937 INFO: StandingCoverTurn030-StandingReactLargeFromLeft010, geo_err: 0.0298
+2025-07-14 03:28:06,630 INFO: StandingCoverTurn030-StandingReactLargeFromLeft016, geo_err: 0.0302
+2025-07-14 03:28:07,446 INFO: StandingCoverTurn030-StandingReactLargeFromLeft021, geo_err: 0.0302
+2025-07-14 03:28:09,075 INFO: BrooklynUprock134-Standing2HMagicAttack01034, geo_err: 0.0371
+2025-07-14 03:28:09,875 INFO: BrooklynUprock134-Standing2HMagicAttack01036, geo_err: 0.0388
+2025-07-14 03:28:11,526 INFO: BrooklynUprock134-Standing2HMagicAttack01043, geo_err: 0.0416
+2025-07-14 03:28:12,337 INFO: BrooklynUprock134-Standing2HMagicAttack01058, geo_err: 0.0386
+2025-07-14 03:28:13,943 INFO: BrooklynUprock134-Standing2HMagicAttack01081, geo_err: 0.0373
+2025-07-14 03:28:14,741 INFO: BrooklynUprock134-StandingReactLargeFromLeft001, geo_err: 0.0385
+2025-07-14 03:28:16,416 INFO: BrooklynUprock134-StandingReactLargeFromLeft005, geo_err: 0.0370
+2025-07-14 03:28:17,209 INFO: BrooklynUprock134-StandingReactLargeFromLeft010, geo_err: 0.0364
+2025-07-14 03:28:18,923 INFO: BrooklynUprock134-StandingReactLargeFromLeft016, geo_err: 0.0364
+2025-07-14 03:28:19,693 INFO: BrooklynUprock134-StandingReactLargeFromLeft021, geo_err: 0.0367
+2025-07-14 03:28:21,336 INFO: BrooklynUprock140-Standing2HMagicAttack01034, geo_err: 0.0404
+2025-07-14 03:28:22,135 INFO: BrooklynUprock140-Standing2HMagicAttack01036, geo_err: 0.0423
+2025-07-14 03:28:23,733 INFO: BrooklynUprock140-Standing2HMagicAttack01043, geo_err: 0.0456
+2025-07-14 03:28:24,547 INFO: BrooklynUprock140-Standing2HMagicAttack01058, geo_err: 0.0403
+2025-07-14 03:28:26,208 INFO: BrooklynUprock140-Standing2HMagicAttack01081, geo_err: 0.0392
+2025-07-14 03:28:26,999 INFO: BrooklynUprock140-StandingReactLargeFromLeft001, geo_err: 0.0398
+2025-07-14 03:28:28,688 INFO: BrooklynUprock140-StandingReactLargeFromLeft005, geo_err: 0.0386
+2025-07-14 03:28:29,483 INFO: BrooklynUprock140-StandingReactLargeFromLeft010, geo_err: 0.0387
+2025-07-14 03:28:31,134 INFO: BrooklynUprock140-StandingReactLargeFromLeft016, geo_err: 0.0385
+2025-07-14 03:28:31,938 INFO: BrooklynUprock140-StandingReactLargeFromLeft021, geo_err: 0.0384
+2025-07-14 03:28:33,564 INFO: BrooklynUprock146-Standing2HMagicAttack01034, geo_err: 0.0380
+2025-07-14 03:28:34,370 INFO: BrooklynUprock146-Standing2HMagicAttack01036, geo_err: 0.0400
+2025-07-14 03:28:35,988 INFO: BrooklynUprock146-Standing2HMagicAttack01043, geo_err: 0.0427
+2025-07-14 03:28:36,780 INFO: BrooklynUprock146-Standing2HMagicAttack01058, geo_err: 0.0388
+2025-07-14 03:28:39,044 INFO: BrooklynUprock146-Standing2HMagicAttack01081, geo_err: 0.0375
+2025-07-14 03:28:39,896 INFO: BrooklynUprock146-StandingReactLargeFromLeft001, geo_err: 0.0381
+2025-07-14 03:28:42,077 INFO: BrooklynUprock146-StandingReactLargeFromLeft005, geo_err: 0.0366
+2025-07-14 03:28:42,897 INFO: BrooklynUprock146-StandingReactLargeFromLeft010, geo_err: 0.0371
+2025-07-14 03:28:44,718 INFO: BrooklynUprock146-StandingReactLargeFromLeft016, geo_err: 0.0366
+2025-07-14 03:28:45,538 INFO: BrooklynUprock146-StandingReactLargeFromLeft021, geo_err: 0.0363
+2025-07-14 03:28:47,319 INFO: Floating007-Standing2HMagicAttack01034, geo_err: 0.0384
+2025-07-14 03:28:48,135 INFO: Floating007-Standing2HMagicAttack01036, geo_err: 0.0407
+2025-07-14 03:28:49,905 INFO: Floating007-Standing2HMagicAttack01043, geo_err: 0.0438
+2025-07-14 03:28:50,723 INFO: Floating007-Standing2HMagicAttack01058, geo_err: 0.0390
+2025-07-14 03:28:52,452 INFO: Floating007-Standing2HMagicAttack01081, geo_err: 0.0375
+2025-07-14 03:28:53,262 INFO: Floating007-StandingReactLargeFromLeft001, geo_err: 0.0382
+2025-07-14 03:28:55,060 INFO: Floating007-StandingReactLargeFromLeft005, geo_err: 0.0378
+2025-07-14 03:28:55,883 INFO: Floating007-StandingReactLargeFromLeft010, geo_err: 0.0389
+2025-07-14 03:28:57,542 INFO: Floating007-StandingReactLargeFromLeft016, geo_err: 0.0386
+2025-07-14 03:28:58,371 INFO: Floating007-StandingReactLargeFromLeft021, geo_err: 0.0382
+2025-07-14 03:29:00,125 INFO: Floating029-Standing2HMagicAttack01034, geo_err: 0.0385
+2025-07-14 03:29:00,930 INFO: Floating029-Standing2HMagicAttack01036, geo_err: 0.0413
+2025-07-14 03:29:02,792 INFO: Floating029-Standing2HMagicAttack01043, geo_err: 0.0441
+2025-07-14 03:29:03,595 INFO: Floating029-Standing2HMagicAttack01058, geo_err: 0.0389
+2025-07-14 03:29:05,371 INFO: Floating029-Standing2HMagicAttack01081, geo_err: 0.0386
+2025-07-14 03:29:06,181 INFO: Floating029-StandingReactLargeFromLeft001, geo_err: 0.0394
+2025-07-14 03:29:08,071 INFO: Floating029-StandingReactLargeFromLeft005, geo_err: 0.0381
+2025-07-14 03:29:08,886 INFO: Floating029-StandingReactLargeFromLeft010, geo_err: 0.0393
+2025-07-14 03:29:10,609 INFO: Floating029-StandingReactLargeFromLeft016, geo_err: 0.0393
+2025-07-14 03:29:11,420 INFO: Floating029-StandingReactLargeFromLeft021, geo_err: 0.0393
+2025-07-14 03:29:13,195 INFO: Floating099-Standing2HMagicAttack01034, geo_err: 0.0373
+2025-07-14 03:29:14,005 INFO: Floating099-Standing2HMagicAttack01036, geo_err: 0.0409
+2025-07-14 03:29:15,711 INFO: Floating099-Standing2HMagicAttack01043, geo_err: 0.0432
+2025-07-14 03:29:16,522 INFO: Floating099-Standing2HMagicAttack01058, geo_err: 0.0382
+2025-07-14 03:29:18,166 INFO: Floating099-Standing2HMagicAttack01081, geo_err: 0.0372
+2025-07-14 03:29:18,982 INFO: Floating099-StandingReactLargeFromLeft001, geo_err: 0.0381
+2025-07-14 03:29:20,754 INFO: Floating099-StandingReactLargeFromLeft005, geo_err: 0.0375
+2025-07-14 03:29:21,575 INFO: Floating099-StandingReactLargeFromLeft010, geo_err: 0.0385
+2025-07-14 03:29:23,255 INFO: Floating099-StandingReactLargeFromLeft016, geo_err: 0.0384
+2025-07-14 03:29:24,046 INFO: Floating099-StandingReactLargeFromLeft021, geo_err: 0.0380
+2025-07-14 03:29:25,726 INFO: KettlebellSwing020-Standing2HMagicAttack01034, geo_err: 0.0390
+2025-07-14 03:29:26,471 INFO: KettlebellSwing020-Standing2HMagicAttack01036, geo_err: 0.0398
+2025-07-14 03:29:28,166 INFO: KettlebellSwing020-Standing2HMagicAttack01043, geo_err: 0.0431
+2025-07-14 03:29:28,983 INFO: KettlebellSwing020-Standing2HMagicAttack01058, geo_err: 0.0392
+2025-07-14 03:29:30,664 INFO: KettlebellSwing020-Standing2HMagicAttack01081, geo_err: 0.0382
+2025-07-14 03:29:31,469 INFO: KettlebellSwing020-StandingReactLargeFromLeft001, geo_err: 0.0389
+2025-07-14 03:29:33,147 INFO: KettlebellSwing020-StandingReactLargeFromLeft005, geo_err: 0.0363
+2025-07-14 03:29:33,957 INFO: KettlebellSwing020-StandingReactLargeFromLeft010, geo_err: 0.0368
+2025-07-14 03:29:35,666 INFO: KettlebellSwing020-StandingReactLargeFromLeft016, geo_err: 0.0370
+2025-07-14 03:29:36,415 INFO: KettlebellSwing020-StandingReactLargeFromLeft021, geo_err: 0.0363
+2025-07-14 03:29:38,144 INFO: KettlebellSwing047-Standing2HMagicAttack01034, geo_err: 0.0406
+2025-07-14 03:29:38,931 INFO: KettlebellSwing047-Standing2HMagicAttack01036, geo_err: 0.0413
+2025-07-14 03:29:40,717 INFO: KettlebellSwing047-Standing2HMagicAttack01043, geo_err: 0.0445
+2025-07-14 03:29:41,530 INFO: KettlebellSwing047-Standing2HMagicAttack01058, geo_err: 0.0406
+2025-07-14 03:29:43,269 INFO: KettlebellSwing047-Standing2HMagicAttack01081, geo_err: 0.0393
+2025-07-14 03:29:44,085 INFO: KettlebellSwing047-StandingReactLargeFromLeft001, geo_err: 0.0399
+2025-07-14 03:29:45,868 INFO: KettlebellSwing047-StandingReactLargeFromLeft005, geo_err: 0.0376
+2025-07-14 03:29:46,692 INFO: KettlebellSwing047-StandingReactLargeFromLeft010, geo_err: 0.0382
+2025-07-14 03:29:48,359 INFO: KettlebellSwing047-StandingReactLargeFromLeft016, geo_err: 0.0386
+2025-07-14 03:29:49,160 INFO: KettlebellSwing047-StandingReactLargeFromLeft021, geo_err: 0.0380
+2025-07-14 03:29:50,863 INFO: KettlebellSwing057-Standing2HMagicAttack01034, geo_err: 0.0419
+2025-07-14 03:29:51,673 INFO: KettlebellSwing057-Standing2HMagicAttack01036, geo_err: 0.0425
+2025-07-14 03:29:53,387 INFO: KettlebellSwing057-Standing2HMagicAttack01043, geo_err: 0.0460
+2025-07-14 03:29:54,206 INFO: KettlebellSwing057-Standing2HMagicAttack01058, geo_err: 0.0417
+2025-07-14 03:29:55,935 INFO: KettlebellSwing057-Standing2HMagicAttack01081, geo_err: 0.0405
+2025-07-14 03:29:56,755 INFO: KettlebellSwing057-StandingReactLargeFromLeft001, geo_err: 0.0409
+2025-07-14 03:29:58,432 INFO: KettlebellSwing057-StandingReactLargeFromLeft005, geo_err: 0.0382
+2025-07-14 03:29:59,252 INFO: KettlebellSwing057-StandingReactLargeFromLeft010, geo_err: 0.0390
+2025-07-14 03:30:00,963 INFO: KettlebellSwing057-StandingReactLargeFromLeft016, geo_err: 0.0393
+2025-07-14 03:30:01,779 INFO: KettlebellSwing057-StandingReactLargeFromLeft021, geo_err: 0.0385
+2025-07-14 03:30:03,392 INFO: ShortLeftSideStep006-Standing2HMagicAttack01034, geo_err: 0.0366
+2025-07-14 03:30:04,207 INFO: ShortLeftSideStep006-Standing2HMagicAttack01036, geo_err: 0.0396
+2025-07-14 03:30:05,843 INFO: ShortLeftSideStep006-Standing2HMagicAttack01043, geo_err: 0.0425
+2025-07-14 03:30:06,655 INFO: ShortLeftSideStep006-Standing2HMagicAttack01058, geo_err: 0.0371
+2025-07-14 03:30:08,275 INFO: ShortLeftSideStep006-Standing2HMagicAttack01081, geo_err: 0.0363
+2025-07-14 03:30:09,076 INFO: ShortLeftSideStep006-StandingReactLargeFromLeft001, geo_err: 0.0368
+2025-07-14 03:30:10,764 INFO: ShortLeftSideStep006-StandingReactLargeFromLeft005, geo_err: 0.0355
+2025-07-14 03:30:11,559 INFO: ShortLeftSideStep006-StandingReactLargeFromLeft010, geo_err: 0.0362
+2025-07-14 03:30:13,192 INFO: ShortLeftSideStep006-StandingReactLargeFromLeft016, geo_err: 0.0362
+2025-07-14 03:30:13,980 INFO: ShortLeftSideStep006-StandingReactLargeFromLeft021, geo_err: 0.0361
+2025-07-14 03:30:15,698 INFO: Falling202-Standing2HMagicAttack01034, geo_err: 0.0377
+2025-07-14 03:30:16,466 INFO: Falling202-Standing2HMagicAttack01036, geo_err: 0.0385
+2025-07-14 03:30:18,173 INFO: Falling202-Standing2HMagicAttack01043, geo_err: 0.0390
+2025-07-14 03:30:18,980 INFO: Falling202-Standing2HMagicAttack01058, geo_err: 0.0355
+2025-07-14 03:30:20,628 INFO: Falling202-Standing2HMagicAttack01081, geo_err: 0.0328
+2025-07-14 03:30:21,433 INFO: Falling202-StandingReactLargeFromLeft001, geo_err: 0.0359
+2025-07-14 03:30:23,062 INFO: Falling202-StandingReactLargeFromLeft005, geo_err: 0.0385
+2025-07-14 03:30:23,877 INFO: Falling202-StandingReactLargeFromLeft010, geo_err: 0.0346
+2025-07-14 03:30:25,535 INFO: Falling202-StandingReactLargeFromLeft016, geo_err: 0.0374
+2025-07-14 03:30:26,331 INFO: Falling202-StandingReactLargeFromLeft021, geo_err: 0.0377
+2025-07-14 03:30:28,010 INFO: Falling216-Standing2HMagicAttack01034, geo_err: 0.0354
+2025-07-14 03:30:28,816 INFO: Falling216-Standing2HMagicAttack01036, geo_err: 0.0378
+2025-07-14 03:30:30,433 INFO: Falling216-Standing2HMagicAttack01043, geo_err: 0.0403
+2025-07-14 03:30:31,245 INFO: Falling216-Standing2HMagicAttack01058, geo_err: 0.0339
+2025-07-14 03:30:32,913 INFO: Falling216-Standing2HMagicAttack01081, geo_err: 0.0340
+2025-07-14 03:30:33,683 INFO: Falling216-StandingReactLargeFromLeft001, geo_err: 0.0363
+2025-07-14 03:30:35,419 INFO: Falling216-StandingReactLargeFromLeft005, geo_err: 0.0391
+2025-07-14 03:30:36,233 INFO: Falling216-StandingReactLargeFromLeft010, geo_err: 0.0347
+2025-07-14 03:30:37,938 INFO: Falling216-StandingReactLargeFromLeft016, geo_err: 0.0354
+2025-07-14 03:30:38,723 INFO: Falling216-StandingReactLargeFromLeft021, geo_err: 0.0348
+2025-07-14 03:30:40,375 INFO: Falling230-Standing2HMagicAttack01034, geo_err: 0.0328
+2025-07-14 03:30:41,179 INFO: Falling230-Standing2HMagicAttack01036, geo_err: 0.0345
+2025-07-14 03:30:42,772 INFO: Falling230-Standing2HMagicAttack01043, geo_err: 0.0360
+2025-07-14 03:30:43,575 INFO: Falling230-Standing2HMagicAttack01058, geo_err: 0.0316
+2025-07-14 03:30:45,201 INFO: Falling230-Standing2HMagicAttack01081, geo_err: 0.0311
+2025-07-14 03:30:46,001 INFO: Falling230-StandingReactLargeFromLeft001, geo_err: 0.0352
+2025-07-14 03:30:47,415 INFO: Falling230-StandingReactLargeFromLeft005, geo_err: 0.0383
+2025-07-14 03:30:48,222 INFO: Falling230-StandingReactLargeFromLeft010, geo_err: 0.0307
+2025-07-14 03:30:50,127 INFO: Falling230-StandingReactLargeFromLeft016, geo_err: 0.0344
+2025-07-14 03:30:50,918 INFO: Falling230-StandingReactLargeFromLeft021, geo_err: 0.0342
+2025-07-14 03:30:52,690 INFO: Falling237-Standing2HMagicAttack01034, geo_err: 0.0309
+2025-07-14 03:30:53,450 INFO: Falling237-Standing2HMagicAttack01036, geo_err: 0.0337
+2025-07-14 03:30:55,277 INFO: Falling237-Standing2HMagicAttack01043, geo_err: 0.0358
+2025-07-14 03:30:56,029 INFO: Falling237-Standing2HMagicAttack01058, geo_err: 0.0300
+2025-07-14 03:30:57,721 INFO: Falling237-Standing2HMagicAttack01081, geo_err: 0.0302
+2025-07-14 03:30:58,468 INFO: Falling237-StandingReactLargeFromLeft001, geo_err: 0.0328
+2025-07-14 03:31:00,296 INFO: Falling237-StandingReactLargeFromLeft005, geo_err: 0.0371
+2025-07-14 03:31:01,063 INFO: Falling237-StandingReactLargeFromLeft010, geo_err: 0.0293
+2025-07-14 03:31:02,796 INFO: Falling237-StandingReactLargeFromLeft016, geo_err: 0.0317
+2025-07-14 03:31:03,569 INFO: Falling237-StandingReactLargeFromLeft021, geo_err: 0.0326
+2025-07-14 03:31:05,337 INFO: Falling257-Standing2HMagicAttack01034, geo_err: 0.0325
+2025-07-14 03:31:06,139 INFO: Falling257-Standing2HMagicAttack01036, geo_err: 0.0355
+2025-07-14 03:31:07,942 INFO: Falling257-Standing2HMagicAttack01043, geo_err: 0.0371
+2025-07-14 03:31:08,742 INFO: Falling257-Standing2HMagicAttack01058, geo_err: 0.0312
+2025-07-14 03:31:10,471 INFO: Falling257-Standing2HMagicAttack01081, geo_err: 0.0307
+2025-07-14 03:31:11,275 INFO: Falling257-StandingReactLargeFromLeft001, geo_err: 0.0325
+2025-07-14 03:31:13,048 INFO: Falling257-StandingReactLargeFromLeft005, geo_err: 0.0327
+2025-07-14 03:31:13,590 INFO: Falling257-StandingReactLargeFromLeft010, geo_err: 0.0308
+2025-07-14 03:31:15,620 INFO: Falling257-StandingReactLargeFromLeft016, geo_err: 0.0313
+2025-07-14 03:31:16,425 INFO: Falling257-StandingReactLargeFromLeft021, geo_err: 0.0316
+2025-07-14 03:31:18,087 INFO: Falling271-Standing2HMagicAttack01034, geo_err: 0.0345
+2025-07-14 03:31:18,894 INFO: Falling271-Standing2HMagicAttack01036, geo_err: 0.0357
+2025-07-14 03:31:20,554 INFO: Falling271-Standing2HMagicAttack01043, geo_err: 0.0382
+2025-07-14 03:31:21,362 INFO: Falling271-Standing2HMagicAttack01058, geo_err: 0.0320
+2025-07-14 03:31:22,981 INFO: Falling271-Standing2HMagicAttack01081, geo_err: 0.0314
+2025-07-14 03:31:23,781 INFO: Falling271-StandingReactLargeFromLeft001, geo_err: 0.0340
+2025-07-14 03:31:25,461 INFO: Falling271-StandingReactLargeFromLeft005, geo_err: 0.0366
+2025-07-14 03:31:26,266 INFO: Falling271-StandingReactLargeFromLeft010, geo_err: 0.0316
+2025-07-14 03:31:27,924 INFO: Falling271-StandingReactLargeFromLeft016, geo_err: 0.0332
+2025-07-14 03:31:28,736 INFO: Falling271-StandingReactLargeFromLeft021, geo_err: 0.0332
+2025-07-14 03:31:30,355 INFO: Falling313-Standing2HMagicAttack01034, geo_err: 0.0368
+2025-07-14 03:31:31,158 INFO: Falling313-Standing2HMagicAttack01036, geo_err: 0.0382
+2025-07-14 03:31:32,814 INFO: Falling313-Standing2HMagicAttack01043, geo_err: 0.0402
+2025-07-14 03:31:33,618 INFO: Falling313-Standing2HMagicAttack01058, geo_err: 0.0342
+2025-07-14 03:31:35,263 INFO: Falling313-Standing2HMagicAttack01081, geo_err: 0.0382
+2025-07-14 03:31:36,066 INFO: Falling313-StandingReactLargeFromLeft001, geo_err: 0.0343
+2025-07-14 03:31:37,800 INFO: Falling313-StandingReactLargeFromLeft005, geo_err: 0.0380
+2025-07-14 03:31:38,614 INFO: Falling313-StandingReactLargeFromLeft010, geo_err: 0.0348
+2025-07-14 03:31:40,243 INFO: Falling313-StandingReactLargeFromLeft016, geo_err: 0.0366
+2025-07-14 03:31:41,057 INFO: Falling313-StandingReactLargeFromLeft021, geo_err: 0.0359
+2025-07-14 03:31:42,647 INFO: Strafing000-Standing2HMagicAttack01034, geo_err: 0.0336
+2025-07-14 03:31:43,460 INFO: Strafing000-Standing2HMagicAttack01036, geo_err: 0.0365
+2025-07-14 03:31:45,072 INFO: Strafing000-Standing2HMagicAttack01043, geo_err: 0.0382
+2025-07-14 03:31:45,883 INFO: Strafing000-Standing2HMagicAttack01058, geo_err: 0.0328
+2025-07-14 03:31:47,547 INFO: Strafing000-Standing2HMagicAttack01081, geo_err: 0.0318
+2025-07-14 03:31:48,352 INFO: Strafing000-StandingReactLargeFromLeft001, geo_err: 0.0333
+2025-07-14 03:31:50,059 INFO: Strafing000-StandingReactLargeFromLeft005, geo_err: 0.0335
+2025-07-14 03:31:50,874 INFO: Strafing000-StandingReactLargeFromLeft010, geo_err: 0.0335
+2025-07-14 03:31:52,509 INFO: Strafing000-StandingReactLargeFromLeft016, geo_err: 0.0337
+2025-07-14 03:31:53,324 INFO: Strafing000-StandingReactLargeFromLeft021, geo_err: 0.0344
+2025-07-14 03:31:54,956 INFO: Strafing009-Standing2HMagicAttack01034, geo_err: 0.0335
+2025-07-14 03:31:55,767 INFO: Strafing009-Standing2HMagicAttack01036, geo_err: 0.0365
+2025-07-14 03:31:57,388 INFO: Strafing009-Standing2HMagicAttack01043, geo_err: 0.0383
+2025-07-14 03:31:58,192 INFO: Strafing009-Standing2HMagicAttack01058, geo_err: 0.0327
+2025-07-14 03:31:59,794 INFO: Strafing009-Standing2HMagicAttack01081, geo_err: 0.0314
+2025-07-14 03:32:00,598 INFO: Strafing009-StandingReactLargeFromLeft001, geo_err: 0.0333
+2025-07-14 03:32:02,380 INFO: Strafing009-StandingReactLargeFromLeft005, geo_err: 0.0333
+2025-07-14 03:32:03,189 INFO: Strafing009-StandingReactLargeFromLeft010, geo_err: 0.0334
+2025-07-14 03:32:04,802 INFO: Strafing009-StandingReactLargeFromLeft016, geo_err: 0.0338
+2025-07-14 03:32:05,587 INFO: Strafing009-StandingReactLargeFromLeft021, geo_err: 0.0345
+2025-07-14 03:32:07,348 INFO: Strafing024-Standing2HMagicAttack01034, geo_err: 0.0320
+2025-07-14 03:32:08,153 INFO: Strafing024-Standing2HMagicAttack01036, geo_err: 0.0351
+2025-07-14 03:32:09,913 INFO: Strafing024-Standing2HMagicAttack01043, geo_err: 0.0370
+2025-07-14 03:32:10,711 INFO: Strafing024-Standing2HMagicAttack01058, geo_err: 0.0315
+2025-07-14 03:32:12,465 INFO: Strafing024-Standing2HMagicAttack01081, geo_err: 0.0302
+2025-07-14 03:32:13,232 INFO: Strafing024-StandingReactLargeFromLeft001, geo_err: 0.0325
+2025-07-14 03:32:15,031 INFO: Strafing024-StandingReactLargeFromLeft005, geo_err: 0.0320
+2025-07-14 03:32:15,799 INFO: Strafing024-StandingReactLargeFromLeft010, geo_err: 0.0318
+2025-07-14 03:32:17,534 INFO: Strafing024-StandingReactLargeFromLeft016, geo_err: 0.0324
+2025-07-14 03:32:18,348 INFO: Strafing024-StandingReactLargeFromLeft021, geo_err: 0.0334
+2025-07-14 03:32:19,994 INFO: GoalkeeperScoop044-Standing2HMagicAttack01034, geo_err: 0.0685
+2025-07-14 03:32:20,796 INFO: GoalkeeperScoop044-Standing2HMagicAttack01036, geo_err: 0.0696
+2025-07-14 03:32:22,403 INFO: GoalkeeperScoop044-Standing2HMagicAttack01043, geo_err: 0.0713
+2025-07-14 03:32:23,160 INFO: GoalkeeperScoop044-Standing2HMagicAttack01058, geo_err: 0.0685
+2025-07-14 03:32:24,832 INFO: GoalkeeperScoop044-Standing2HMagicAttack01081, geo_err: 0.0691
+2025-07-14 03:32:25,594 INFO: GoalkeeperScoop044-StandingReactLargeFromLeft001, geo_err: 0.0699
+2025-07-14 03:32:27,350 INFO: GoalkeeperScoop044-StandingReactLargeFromLeft005, geo_err: 0.0690
+2025-07-14 03:32:28,141 INFO: GoalkeeperScoop044-StandingReactLargeFromLeft010, geo_err: 0.0714
+2025-07-14 03:32:29,775 INFO: GoalkeeperScoop044-StandingReactLargeFromLeft016, geo_err: 0.0698
+2025-07-14 03:32:30,590 INFO: GoalkeeperScoop044-StandingReactLargeFromLeft021, geo_err: 0.0697
+2025-07-14 03:32:32,154 INFO: GoalkeeperScoop046-Standing2HMagicAttack01034, geo_err: 0.0686
+2025-07-14 03:32:32,968 INFO: GoalkeeperScoop046-Standing2HMagicAttack01036, geo_err: 0.0692
+2025-07-14 03:32:34,612 INFO: GoalkeeperScoop046-Standing2HMagicAttack01043, geo_err: 0.0724
+2025-07-14 03:32:35,424 INFO: GoalkeeperScoop046-Standing2HMagicAttack01058, geo_err: 0.0699
+2025-07-14 03:32:37,046 INFO: GoalkeeperScoop046-Standing2HMagicAttack01081, geo_err: 0.0688
+2025-07-14 03:32:37,838 INFO: GoalkeeperScoop046-StandingReactLargeFromLeft001, geo_err: 0.0711
+2025-07-14 03:32:39,530 INFO: GoalkeeperScoop046-StandingReactLargeFromLeft005, geo_err: 0.0706
+2025-07-14 03:32:40,352 INFO: GoalkeeperScoop046-StandingReactLargeFromLeft010, geo_err: 0.0713
+2025-07-14 03:32:41,916 INFO: GoalkeeperScoop046-StandingReactLargeFromLeft016, geo_err: 0.0708
+2025-07-14 03:32:42,733 INFO: GoalkeeperScoop046-StandingReactLargeFromLeft021, geo_err: 0.0702
+2025-07-14 03:32:44,331 INFO: GoalkeeperScoop049-Standing2HMagicAttack01034, geo_err: 0.0680
+2025-07-14 03:32:45,134 INFO: GoalkeeperScoop049-Standing2HMagicAttack01036, geo_err: 0.0692
+2025-07-14 03:32:46,834 INFO: GoalkeeperScoop049-Standing2HMagicAttack01043, geo_err: 0.0720
+2025-07-14 03:32:47,595 INFO: GoalkeeperScoop049-Standing2HMagicAttack01058, geo_err: 0.0694
+2025-07-14 03:32:49,286 INFO: GoalkeeperScoop049-Standing2HMagicAttack01081, geo_err: 0.0689
+2025-07-14 03:32:50,094 INFO: GoalkeeperScoop049-StandingReactLargeFromLeft001, geo_err: 0.0717
+2025-07-14 03:32:51,756 INFO: GoalkeeperScoop049-StandingReactLargeFromLeft005, geo_err: 0.0702
+2025-07-14 03:32:52,558 INFO: GoalkeeperScoop049-StandingReactLargeFromLeft010, geo_err: 0.0716
+2025-07-14 03:32:54,151 INFO: GoalkeeperScoop049-StandingReactLargeFromLeft016, geo_err: 0.0704
+2025-07-14 03:32:54,911 INFO: GoalkeeperScoop049-StandingReactLargeFromLeft021, geo_err: 0.0701
+2025-07-14 03:32:56,593 INFO: GoalkeeperScoop052-Standing2HMagicAttack01034, geo_err: 0.0683
+2025-07-14 03:32:57,360 INFO: GoalkeeperScoop052-Standing2HMagicAttack01036, geo_err: 0.0693
+2025-07-14 03:32:58,989 INFO: GoalkeeperScoop052-Standing2HMagicAttack01043, geo_err: 0.0715
+2025-07-14 03:32:59,798 INFO: GoalkeeperScoop052-Standing2HMagicAttack01058, geo_err: 0.0690
+2025-07-14 03:33:01,353 INFO: GoalkeeperScoop052-Standing2HMagicAttack01081, geo_err: 0.0680
+2025-07-14 03:33:02,141 INFO: GoalkeeperScoop052-StandingReactLargeFromLeft001, geo_err: 0.0719
+2025-07-14 03:33:03,853 INFO: GoalkeeperScoop052-StandingReactLargeFromLeft005, geo_err: 0.0716
+2025-07-14 03:33:04,639 INFO: GoalkeeperScoop052-StandingReactLargeFromLeft010, geo_err: 0.0717
+2025-07-14 03:33:06,369 INFO: GoalkeeperScoop052-StandingReactLargeFromLeft016, geo_err: 0.0713
+2025-07-14 03:33:07,189 INFO: GoalkeeperScoop052-StandingReactLargeFromLeft021, geo_err: 0.0702
+2025-07-14 03:33:08,784 INFO: GoalkeeperScoop055-Standing2HMagicAttack01034, geo_err: 0.0697
+2025-07-14 03:33:09,586 INFO: GoalkeeperScoop055-Standing2HMagicAttack01036, geo_err: 0.0702
+2025-07-14 03:33:11,154 INFO: GoalkeeperScoop055-Standing2HMagicAttack01043, geo_err: 0.0730
+2025-07-14 03:33:11,962 INFO: GoalkeeperScoop055-Standing2HMagicAttack01058, geo_err: 0.0707
+2025-07-14 03:33:13,565 INFO: GoalkeeperScoop055-Standing2HMagicAttack01081, geo_err: 0.0709
+2025-07-14 03:33:14,348 INFO: GoalkeeperScoop055-StandingReactLargeFromLeft001, geo_err: 0.0715
+2025-07-14 03:33:16,105 INFO: GoalkeeperScoop055-StandingReactLargeFromLeft005, geo_err: 0.0708
+2025-07-14 03:33:16,893 INFO: GoalkeeperScoop055-StandingReactLargeFromLeft010, geo_err: 0.0716
+2025-07-14 03:33:18,505 INFO: GoalkeeperScoop055-StandingReactLargeFromLeft016, geo_err: 0.0714
+2025-07-14 03:33:19,310 INFO: GoalkeeperScoop055-StandingReactLargeFromLeft021, geo_err: 0.0710
+2025-07-14 03:33:20,880 INFO: GoalkeeperScoop058-Standing2HMagicAttack01034, geo_err: 0.0678
+2025-07-14 03:33:21,694 INFO: GoalkeeperScoop058-Standing2HMagicAttack01036, geo_err: 0.0694
+2025-07-14 03:33:23,263 INFO: GoalkeeperScoop058-Standing2HMagicAttack01043, geo_err: 0.0712
+2025-07-14 03:33:24,065 INFO: GoalkeeperScoop058-Standing2HMagicAttack01058, geo_err: 0.0701
+2025-07-14 03:33:25,710 INFO: GoalkeeperScoop058-Standing2HMagicAttack01081, geo_err: 0.0691
+2025-07-14 03:33:26,516 INFO: GoalkeeperScoop058-StandingReactLargeFromLeft001, geo_err: 0.0728
+2025-07-14 03:33:28,168 INFO: GoalkeeperScoop058-StandingReactLargeFromLeft005, geo_err: 0.0717
+2025-07-14 03:33:28,970 INFO: GoalkeeperScoop058-StandingReactLargeFromLeft010, geo_err: 0.0717
+2025-07-14 03:33:30,562 INFO: GoalkeeperScoop058-StandingReactLargeFromLeft016, geo_err: 0.0710
+2025-07-14 03:33:31,320 INFO: GoalkeeperScoop058-StandingReactLargeFromLeft021, geo_err: 0.0705
+2025-07-14 03:33:32,985 INFO: GoalkeeperScoop061-Standing2HMagicAttack01034, geo_err: 0.0708
+2025-07-14 03:33:33,765 INFO: GoalkeeperScoop061-Standing2HMagicAttack01036, geo_err: 0.0700
+2025-07-14 03:33:35,386 INFO: GoalkeeperScoop061-Standing2HMagicAttack01043, geo_err: 0.0727
+2025-07-14 03:33:36,212 INFO: GoalkeeperScoop061-Standing2HMagicAttack01058, geo_err: 0.0718
+2025-07-14 03:33:37,787 INFO: GoalkeeperScoop061-Standing2HMagicAttack01081, geo_err: 0.0717
+2025-07-14 03:33:38,592 INFO: GoalkeeperScoop061-StandingReactLargeFromLeft001, geo_err: 0.0738
+2025-07-14 03:33:40,308 INFO: GoalkeeperScoop061-StandingReactLargeFromLeft005, geo_err: 0.0719
+2025-07-14 03:33:41,092 INFO: GoalkeeperScoop061-StandingReactLargeFromLeft010, geo_err: 0.0720
+2025-07-14 03:33:42,743 INFO: GoalkeeperScoop061-StandingReactLargeFromLeft016, geo_err: 0.0715
+2025-07-14 03:33:43,539 INFO: GoalkeeperScoop061-StandingReactLargeFromLeft021, geo_err: 0.0715
+2025-07-14 03:33:45,217 INFO: GoalkeeperScoop065-Standing2HMagicAttack01034, geo_err: 0.0685
+2025-07-14 03:33:46,017 INFO: GoalkeeperScoop065-Standing2HMagicAttack01036, geo_err: 0.0698
+2025-07-14 03:33:47,669 INFO: GoalkeeperScoop065-Standing2HMagicAttack01043, geo_err: 0.0717
+2025-07-14 03:33:48,478 INFO: GoalkeeperScoop065-Standing2HMagicAttack01058, geo_err: 0.0721
+2025-07-14 03:33:50,088 INFO: GoalkeeperScoop065-Standing2HMagicAttack01081, geo_err: 0.0693
+2025-07-14 03:33:50,876 INFO: GoalkeeperScoop065-StandingReactLargeFromLeft001, geo_err: 0.0720
+2025-07-14 03:33:52,595 INFO: GoalkeeperScoop065-StandingReactLargeFromLeft005, geo_err: 0.0696
+2025-07-14 03:33:53,401 INFO: GoalkeeperScoop065-StandingReactLargeFromLeft010, geo_err: 0.0713
+2025-07-14 03:33:55,017 INFO: GoalkeeperScoop065-StandingReactLargeFromLeft016, geo_err: 0.0713
+2025-07-14 03:33:55,835 INFO: GoalkeeperScoop065-StandingReactLargeFromLeft021, geo_err: 0.0708
+2025-07-14 03:33:57,419 INFO: GoalkeeperScoop069-Standing2HMagicAttack01034, geo_err: 0.0698
+2025-07-14 03:33:58,191 INFO: GoalkeeperScoop069-Standing2HMagicAttack01036, geo_err: 0.0700
+2025-07-14 03:33:59,854 INFO: GoalkeeperScoop069-Standing2HMagicAttack01043, geo_err: 0.0734
+2025-07-14 03:34:00,624 INFO: GoalkeeperScoop069-Standing2HMagicAttack01058, geo_err: 0.0709
+2025-07-14 03:34:02,269 INFO: GoalkeeperScoop069-Standing2HMagicAttack01081, geo_err: 0.0702
+2025-07-14 03:34:03,067 INFO: GoalkeeperScoop069-StandingReactLargeFromLeft001, geo_err: 0.0727
+2025-07-14 03:34:04,764 INFO: GoalkeeperScoop069-StandingReactLargeFromLeft005, geo_err: 0.0708
+2025-07-14 03:34:05,569 INFO: GoalkeeperScoop069-StandingReactLargeFromLeft010, geo_err: 0.0717
+2025-07-14 03:34:07,217 INFO: GoalkeeperScoop069-StandingReactLargeFromLeft016, geo_err: 0.0720
+2025-07-14 03:34:07,978 INFO: GoalkeeperScoop069-StandingReactLargeFromLeft021, geo_err: 0.0712
+2025-07-14 03:34:09,621 INFO: GoalkeeperScoop078-Standing2HMagicAttack01034, geo_err: 0.0692
+2025-07-14 03:34:10,399 INFO: GoalkeeperScoop078-Standing2HMagicAttack01036, geo_err: 0.0704
+2025-07-14 03:34:12,094 INFO: GoalkeeperScoop078-Standing2HMagicAttack01043, geo_err: 0.0720
+2025-07-14 03:34:12,889 INFO: GoalkeeperScoop078-Standing2HMagicAttack01058, geo_err: 0.0708
+2025-07-14 03:34:14,502 INFO: GoalkeeperScoop078-Standing2HMagicAttack01081, geo_err: 0.0701
+2025-07-14 03:34:15,300 INFO: GoalkeeperScoop078-StandingReactLargeFromLeft001, geo_err: 0.0723
+2025-07-14 03:34:16,963 INFO: GoalkeeperScoop078-StandingReactLargeFromLeft005, geo_err: 0.0724
+2025-07-14 03:34:17,770 INFO: GoalkeeperScoop078-StandingReactLargeFromLeft010, geo_err: 0.0706
+2025-07-14 03:34:19,360 INFO: GoalkeeperScoop078-StandingReactLargeFromLeft016, geo_err: 0.0716
+2025-07-14 03:34:20,140 INFO: GoalkeeperScoop078-StandingReactLargeFromLeft021, geo_err: 0.0710
+2025-07-14 03:34:21,883 INFO: DancingRunningMan259-Standing2HMagicAttack01034, geo_err: 0.0254
+2025-07-14 03:34:22,654 INFO: DancingRunningMan259-Standing2HMagicAttack01036, geo_err: 0.0256
+2025-07-14 03:34:24,359 INFO: DancingRunningMan259-Standing2HMagicAttack01043, geo_err: 0.0265
+2025-07-14 03:34:25,160 INFO: DancingRunningMan259-Standing2HMagicAttack01058, geo_err: 0.0263
+2025-07-14 03:34:26,795 INFO: DancingRunningMan259-Standing2HMagicAttack01081, geo_err: 0.0251
+2025-07-14 03:34:27,672 INFO: DancingRunningMan259-StandingReactLargeFromLeft001, geo_err: 0.0245
+2025-07-14 03:34:29,337 INFO: DancingRunningMan259-StandingReactLargeFromLeft005, geo_err: 0.0259
+2025-07-14 03:34:30,147 INFO: DancingRunningMan259-StandingReactLargeFromLeft010, geo_err: 0.0250
+2025-07-14 03:34:31,849 INFO: DancingRunningMan259-StandingReactLargeFromLeft016, geo_err: 0.0251
+2025-07-14 03:34:32,629 INFO: DancingRunningMan259-StandingReactLargeFromLeft021, geo_err: 0.0244
+2025-07-14 03:34:34,322 INFO: DancingRunningMan265-Standing2HMagicAttack01034, geo_err: 0.0287
+2025-07-14 03:34:35,134 INFO: DancingRunningMan265-Standing2HMagicAttack01036, geo_err: 0.0280
+2025-07-14 03:34:36,796 INFO: DancingRunningMan265-Standing2HMagicAttack01043, geo_err: 0.0291
+2025-07-14 03:34:37,581 INFO: DancingRunningMan265-Standing2HMagicAttack01058, geo_err: 0.0303
+2025-07-14 03:34:39,266 INFO: DancingRunningMan265-Standing2HMagicAttack01081, geo_err: 0.0293
+2025-07-14 03:34:40,073 INFO: DancingRunningMan265-StandingReactLargeFromLeft001, geo_err: 0.0291
+2025-07-14 03:34:41,752 INFO: DancingRunningMan265-StandingReactLargeFromLeft005, geo_err: 0.0287
+2025-07-14 03:34:42,563 INFO: DancingRunningMan265-StandingReactLargeFromLeft010, geo_err: 0.0275
+2025-07-14 03:34:44,200 INFO: DancingRunningMan265-StandingReactLargeFromLeft016, geo_err: 0.0270
+2025-07-14 03:34:45,011 INFO: DancingRunningMan265-StandingReactLargeFromLeft021, geo_err: 0.0269
+2025-07-14 03:34:46,635 INFO: DancingRunningMan272-Standing2HMagicAttack01034, geo_err: 0.0312
+2025-07-14 03:34:47,445 INFO: DancingRunningMan272-Standing2HMagicAttack01036, geo_err: 0.0310
+2025-07-14 03:34:49,085 INFO: DancingRunningMan272-Standing2HMagicAttack01043, geo_err: 0.0332
+2025-07-14 03:34:49,878 INFO: DancingRunningMan272-Standing2HMagicAttack01058, geo_err: 0.0323
+2025-07-14 03:34:51,557 INFO: DancingRunningMan272-Standing2HMagicAttack01081, geo_err: 0.0308
+2025-07-14 03:34:52,366 INFO: DancingRunningMan272-StandingReactLargeFromLeft001, geo_err: 0.0295
+2025-07-14 03:34:53,996 INFO: DancingRunningMan272-StandingReactLargeFromLeft005, geo_err: 0.0295
+2025-07-14 03:34:54,813 INFO: DancingRunningMan272-StandingReactLargeFromLeft010, geo_err: 0.0295
+2025-07-14 03:34:56,366 INFO: DancingRunningMan272-StandingReactLargeFromLeft016, geo_err: 0.0297
+2025-07-14 03:34:57,174 INFO: DancingRunningMan272-StandingReactLargeFromLeft021, geo_err: 0.0279
+2025-07-14 03:34:58,833 INFO: DancingRunningMan279-Standing2HMagicAttack01034, geo_err: 0.0250
+2025-07-14 03:34:59,613 INFO: DancingRunningMan279-Standing2HMagicAttack01036, geo_err: 0.0257
+2025-07-14 03:35:01,295 INFO: DancingRunningMan279-Standing2HMagicAttack01043, geo_err: 0.0276
+2025-07-14 03:35:02,102 INFO: DancingRunningMan279-Standing2HMagicAttack01058, geo_err: 0.0264
+2025-07-14 03:35:03,678 INFO: DancingRunningMan279-Standing2HMagicAttack01081, geo_err: 0.0252
+2025-07-14 03:35:04,496 INFO: DancingRunningMan279-StandingReactLargeFromLeft001, geo_err: 0.0248
+2025-07-14 03:35:06,131 INFO: DancingRunningMan279-StandingReactLargeFromLeft005, geo_err: 0.0255
+2025-07-14 03:35:06,932 INFO: DancingRunningMan279-StandingReactLargeFromLeft010, geo_err: 0.0248
+2025-07-14 03:35:08,598 INFO: DancingRunningMan279-StandingReactLargeFromLeft016, geo_err: 0.0248
+2025-07-14 03:35:09,376 INFO: DancingRunningMan279-StandingReactLargeFromLeft021, geo_err: 0.0243
+2025-07-14 03:35:11,082 INFO: DancingRunningMan285-Standing2HMagicAttack01034, geo_err: 0.0253
+2025-07-14 03:35:11,889 INFO: DancingRunningMan285-Standing2HMagicAttack01036, geo_err: 0.0260
+2025-07-14 03:35:13,570 INFO: DancingRunningMan285-Standing2HMagicAttack01043, geo_err: 0.0276
+2025-07-14 03:35:14,377 INFO: DancingRunningMan285-Standing2HMagicAttack01058, geo_err: 0.0263
+2025-07-14 03:35:15,998 INFO: DancingRunningMan285-Standing2HMagicAttack01081, geo_err: 0.0249
+2025-07-14 03:35:16,789 INFO: DancingRunningMan285-StandingReactLargeFromLeft001, geo_err: 0.0243
+2025-07-14 03:35:18,566 INFO: DancingRunningMan285-StandingReactLargeFromLeft005, geo_err: 0.0258
+2025-07-14 03:35:19,376 INFO: DancingRunningMan285-StandingReactLargeFromLeft010, geo_err: 0.0253
+2025-07-14 03:35:21,018 INFO: DancingRunningMan285-StandingReactLargeFromLeft016, geo_err: 0.0254
+2025-07-14 03:35:21,813 INFO: DancingRunningMan285-StandingReactLargeFromLeft021, geo_err: 0.0247
+2025-07-14 03:35:23,411 INFO: DancingRunningMan292-Standing2HMagicAttack01034, geo_err: 0.0269
+2025-07-14 03:35:24,217 INFO: DancingRunningMan292-Standing2HMagicAttack01036, geo_err: 0.0271
+2025-07-14 03:35:25,822 INFO: DancingRunningMan292-Standing2HMagicAttack01043, geo_err: 0.0297
+2025-07-14 03:35:26,627 INFO: DancingRunningMan292-Standing2HMagicAttack01058, geo_err: 0.0276
+2025-07-14 03:35:28,267 INFO: DancingRunningMan292-Standing2HMagicAttack01081, geo_err: 0.0261
+2025-07-14 03:35:29,074 INFO: DancingRunningMan292-StandingReactLargeFromLeft001, geo_err: 0.0253
+2025-07-14 03:35:30,718 INFO: DancingRunningMan292-StandingReactLargeFromLeft005, geo_err: 0.0250
+2025-07-14 03:35:31,527 INFO: DancingRunningMan292-StandingReactLargeFromLeft010, geo_err: 0.0256
+2025-07-14 03:35:33,124 INFO: DancingRunningMan292-StandingReactLargeFromLeft016, geo_err: 0.0258
+2025-07-14 03:35:33,936 INFO: DancingRunningMan292-StandingReactLargeFromLeft021, geo_err: 0.0245
+2025-07-14 03:35:35,643 INFO: DancingRunningMan298-Standing2HMagicAttack01034, geo_err: 0.0262
+2025-07-14 03:35:36,387 INFO: DancingRunningMan298-Standing2HMagicAttack01036, geo_err: 0.0268
+2025-07-14 03:35:38,146 INFO: DancingRunningMan298-Standing2HMagicAttack01043, geo_err: 0.0293
+2025-07-14 03:35:38,957 INFO: DancingRunningMan298-Standing2HMagicAttack01058, geo_err: 0.0268
+2025-07-14 03:35:40,708 INFO: DancingRunningMan298-Standing2HMagicAttack01081, geo_err: 0.0258
+2025-07-14 03:35:41,555 INFO: DancingRunningMan298-StandingReactLargeFromLeft001, geo_err: 0.0250
+2025-07-14 03:35:43,282 INFO: DancingRunningMan298-StandingReactLargeFromLeft005, geo_err: 0.0240
+2025-07-14 03:35:44,095 INFO: DancingRunningMan298-StandingReactLargeFromLeft010, geo_err: 0.0252
+2025-07-14 03:35:45,852 INFO: DancingRunningMan298-StandingReactLargeFromLeft016, geo_err: 0.0258
+2025-07-14 03:35:46,610 INFO: DancingRunningMan298-StandingReactLargeFromLeft021, geo_err: 0.0242
+2025-07-14 03:35:48,321 INFO: DancingRunningMan305-Standing2HMagicAttack01034, geo_err: 0.0234
+2025-07-14 03:35:49,125 INFO: DancingRunningMan305-Standing2HMagicAttack01036, geo_err: 0.0251
+2025-07-14 03:35:50,790 INFO: DancingRunningMan305-Standing2HMagicAttack01043, geo_err: 0.0276
+2025-07-14 03:35:51,603 INFO: DancingRunningMan305-Standing2HMagicAttack01058, geo_err: 0.0244
+2025-07-14 03:35:53,210 INFO: DancingRunningMan305-Standing2HMagicAttack01081, geo_err: 0.0229
+2025-07-14 03:35:54,083 INFO: DancingRunningMan305-StandingReactLargeFromLeft001, geo_err: 0.0227
+2025-07-14 03:35:55,790 INFO: DancingRunningMan305-StandingReactLargeFromLeft005, geo_err: 0.0239
+2025-07-14 03:35:56,610 INFO: DancingRunningMan305-StandingReactLargeFromLeft010, geo_err: 0.0241
+2025-07-14 03:35:58,203 INFO: DancingRunningMan305-StandingReactLargeFromLeft016, geo_err: 0.0240
+2025-07-14 03:35:59,016 INFO: DancingRunningMan305-StandingReactLargeFromLeft021, geo_err: 0.0235
+2025-07-14 03:36:00,742 INFO: DancingRunningMan312-Standing2HMagicAttack01034, geo_err: 0.0243
+2025-07-14 03:36:01,528 INFO: DancingRunningMan312-Standing2HMagicAttack01036, geo_err: 0.0259
+2025-07-14 03:36:03,231 INFO: DancingRunningMan312-Standing2HMagicAttack01043, geo_err: 0.0282
+2025-07-14 03:36:04,044 INFO: DancingRunningMan312-Standing2HMagicAttack01058, geo_err: 0.0251
+2025-07-14 03:36:05,697 INFO: DancingRunningMan312-Standing2HMagicAttack01081, geo_err: 0.0235
+2025-07-14 03:36:06,519 INFO: DancingRunningMan312-StandingReactLargeFromLeft001, geo_err: 0.0234
+2025-07-14 03:36:08,135 INFO: DancingRunningMan312-StandingReactLargeFromLeft005, geo_err: 0.0251
+2025-07-14 03:36:08,954 INFO: DancingRunningMan312-StandingReactLargeFromLeft010, geo_err: 0.0255
+2025-07-14 03:36:10,573 INFO: DancingRunningMan312-StandingReactLargeFromLeft016, geo_err: 0.0259
+2025-07-14 03:36:11,371 INFO: DancingRunningMan312-StandingReactLargeFromLeft021, geo_err: 0.0248
+2025-07-14 03:36:13,127 INFO: DancingRunningMan325-Standing2HMagicAttack01034, geo_err: 0.0247
+2025-07-14 03:36:13,943 INFO: DancingRunningMan325-Standing2HMagicAttack01036, geo_err: 0.0260
+2025-07-14 03:36:15,709 INFO: DancingRunningMan325-Standing2HMagicAttack01043, geo_err: 0.0283
+2025-07-14 03:36:16,518 INFO: DancingRunningMan325-Standing2HMagicAttack01058, geo_err: 0.0248
+2025-07-14 03:36:18,241 INFO: DancingRunningMan325-Standing2HMagicAttack01081, geo_err: 0.0238
+2025-07-14 03:36:18,980 INFO: DancingRunningMan325-StandingReactLargeFromLeft001, geo_err: 0.0226
+2025-07-14 03:36:20,846 INFO: DancingRunningMan325-StandingReactLargeFromLeft005, geo_err: 0.0246
+2025-07-14 03:36:21,638 INFO: DancingRunningMan325-StandingReactLargeFromLeft010, geo_err: 0.0243
+2025-07-14 03:36:23,368 INFO: DancingRunningMan325-StandingReactLargeFromLeft016, geo_err: 0.0243
+2025-07-14 03:36:24,126 INFO: DancingRunningMan325-StandingReactLargeFromLeft021, geo_err: 0.0236
+2025-07-14 03:36:24,147 INFO: Avg time: 0.3777
+2025-07-14 03:36:25,208 INFO: Val auc: 0.6552
+2025-07-14 03:36:25,208 INFO: Val avg error: 0.0423

@@ -1,0 +1,176 @@
+2024-12-10 02:15:31,085 INFO: 
+Version Information: 
+	Python: 3.8.20
+	PyTorch: 2.0.0+cu118
+	TorchVision: 0.15.0+cu118
+2024-12-10 02:15:31,086 INFO: 
+  name: topkids_diffusion_iter5
+  backend: dp
+  type: FAPModel
+  num_gpu: 1
+  gpu_idx: 3
+  manual_seed: 1234
+  refine: 0
+  non-isometric: False
+  partial: False
+  visualize: True
+  path:[
+    resume_state: experiments/FAP_topkids_diffusion/models/38000.pth
+    resume: False
+    results_root: /mnt/zj-gpfs/home/luofeifan/shape_correspondence/DeepFAFP_main/results/topkids_diffusion_iter5
+    log: /mnt/zj-gpfs/home/luofeifan/shape_correspondence/DeepFAFP_main/results/topkids_diffusion_iter5/log
+    visualization: /mnt/zj-gpfs/home/luofeifan/shape_correspondence/DeepFAFP_main/results/topkids_diffusion_iter5/visualization
+  ]
+  datasets:[
+    test_dataset:[
+      name: Val
+      type: PairTopKidsDataset
+      phase: test
+      data_root: ../data/TOPKIDS/
+      return_evecs: True
+      return_faces: True
+      num_evecs: 200
+      return_dist: True
+    ]
+  ]
+  networks:[
+    feature_extractor:[
+      type: DiffusionNet
+      in_channels: 128
+      out_channels: 256
+      cache_dir: ../data/TOPKIDS/diffusion
+      input_type: wks
+    ]
+    fmap_net:[
+      type: RegularizedFMNet
+      bidirectional: False
+    ]
+    permutation:[
+      type: Similarity
+      tau: 0.07
+      hard: True
+    ]
+    conv:[
+      type: Learned_Fliters
+      Poly_Type: JacobiConv
+      orders: 8
+      alpha: 1.0
+      learnable_bases: True
+      learnable_alphas: True
+      normalized_bases: True
+      a: 1.0
+      b: 1.0
+    ]
+    comb:[
+      type: Combination
+      orders_basis: 8
+      output_channels: 6
+    ]
+  ]
+  train:[
+    optims:[
+      feature_extractor:[
+        type: Adam
+        lr: 0.001
+      ]
+      conv:[
+        type: Adam
+        lr: 0.001
+      ]
+      comb:[
+        type: Adam
+        lr: 0.001
+      ]
+    ]
+    schedulers:[
+      feature_extractor:[
+        type: none
+      ]
+      conv:[
+        type: none
+      ]
+      comb:[
+        type: none
+      ]
+    ]
+    losses:[
+      surfmnet_loss:[
+        type: SURFMNetLoss
+        w_bij: 1.0
+        w_orth: 1.0
+        w_lap: 0.0
+      ]
+      align_loss:[
+        type: SquaredFrobeniusLoss
+        loss_weight: 1.0
+      ]
+      dirichlet_loss:[
+        type: DirichletLoss
+        loss_weight: 5.0
+      ]
+    ]
+  ]
+  val:[
+    metrics:[
+      geo_error:[
+        type: calculate_geodesic_error
+      ]
+      plot_pck:[
+        type: plot_pck
+      ]
+    ]
+  ]
+  is_train: False
+  dist: False
+  rank: 0
+  world_size: 1
+
+2024-12-10 02:15:31,087 INFO: Dataset [PairTopKidsDataset]-[Val] is built.
+2024-12-10 02:15:31,090 INFO: Number of test images in Val: 25
+2024-12-10 02:15:31,128 INFO: Network [DiffusionNet] is created.
+2024-12-10 02:15:31,128 INFO: Network [RegularizedFMNet] is created.
+2024-12-10 02:15:31,128 INFO: Network [Similarity] is created.
+2024-12-10 02:15:31,128 INFO: Network [Learned_Fliters] is created.
+2024-12-10 02:15:31,129 INFO: Network [Combination] is created.
+2024-12-10 02:15:32,245 INFO: Network: DiffusionNet, with parameters: 510,336
+2024-12-10 02:15:32,245 INFO: Network: RegularizedFMNet, with parameters: 0
+2024-12-10 02:15:32,245 INFO: Network: Similarity, with parameters: 0
+2024-12-10 02:15:32,245 INFO: Network: Learned_Fliters, with parameters: 10
+2024-12-10 02:15:32,245 INFO: Network: Combination, with parameters: 48
+2024-12-10 02:15:32,245 INFO: Metric [function] is created.
+2024-12-10 02:15:32,245 INFO: Metric [function] is created.
+2024-12-10 02:15:32,466 INFO: Resuming network: feature_extractor
+2024-12-10 02:15:32,466 INFO: Network fmap_net has no param. Ignore it.
+2024-12-10 02:15:32,466 INFO: Network permutation has no param. Ignore it.
+2024-12-10 02:15:32,467 INFO: Resuming network: conv
+2024-12-10 02:15:32,467 INFO: Resuming network: comb
+2024-12-10 02:15:32,467 INFO: Model [FAPModel] is created.
+2024-12-10 02:15:32,467 INFO: Testing PairTopKidsDataset...
+2024-12-10 02:15:41,804 INFO: kid00-kid01, geo_err: 0.0605
+2024-12-10 02:15:43,109 INFO: kid00-kid02, geo_err: 0.0365
+2024-12-10 02:15:44,150 INFO: kid00-kid03, geo_err: 0.0911
+2024-12-10 02:15:47,488 INFO: kid00-kid04, geo_err: 0.0251
+2024-12-10 02:15:50,596 INFO: kid00-kid05, geo_err: 0.0187
+2024-12-10 02:15:51,914 INFO: kid00-kid06, geo_err: 0.0550
+2024-12-10 02:15:56,230 INFO: kid00-kid07, geo_err: 0.0172
+2024-12-10 02:15:57,693 INFO: kid00-kid08, geo_err: 0.0216
+2024-12-10 02:16:02,292 INFO: kid00-kid09, geo_err: 0.0244
+2024-12-10 02:16:04,031 INFO: kid00-kid10, geo_err: 0.0268
+2024-12-10 02:16:08,529 INFO: kid00-kid11, geo_err: 0.0358
+2024-12-10 02:16:09,690 INFO: kid00-kid12, geo_err: 0.0500
+2024-12-10 02:16:14,190 INFO: kid00-kid13, geo_err: 0.0758
+2024-12-10 02:16:15,443 INFO: kid00-kid14, geo_err: 0.1986
+2024-12-10 02:16:19,726 INFO: kid00-kid15, geo_err: 0.1367
+2024-12-10 02:16:21,194 INFO: kid00-kid16, geo_err: 0.0304
+2024-12-10 02:16:26,291 INFO: kid00-kid17, geo_err: 0.2322
+2024-12-10 02:16:27,465 INFO: kid00-kid18, geo_err: 0.0429
+2024-12-10 02:16:31,277 INFO: kid00-kid19, geo_err: 0.1441
+2024-12-10 02:16:32,449 INFO: kid00-kid20, geo_err: 0.0855
+2024-12-10 02:16:37,548 INFO: kid00-kid21, geo_err: 0.0638
+2024-12-10 02:16:38,678 INFO: kid00-kid22, geo_err: 0.0647
+2024-12-10 02:16:43,984 INFO: kid00-kid23, geo_err: 0.0276
+2024-12-10 02:16:45,238 INFO: kid00-kid24, geo_err: 0.0264
+2024-12-10 02:16:49,533 INFO: kid00-kid25, geo_err: 0.0322
+2024-12-10 02:16:49,557 INFO: Avg time: 0.3646
+2024-12-10 02:16:49,653 INFO: Val auc: 0.6934
+2024-12-10 02:16:49,653 INFO: Val avg error: 0.0629
